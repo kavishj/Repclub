@@ -1,6 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import * as m from "motion/react-m";
+import { TimingSummary } from "./scan-workout";
 import { ArrowRight, ArrowUpRight, ChevronDown, CircleHelp, Clock3, Dumbbell, Heart, RotateCcw, ShieldCheck, Trophy } from "lucide-react";
 import { type RankedMember, type Session } from "../lib/league";
 export type Exercise = {
@@ -24,8 +25,8 @@ export function Avatar({ name, size = "", index = 0 }: {
 export function Pill({ status }: {
     status: string;
 }) {
-    const Icon = status === "verified" ? ShieldCheck : status === "pending" ? Clock3 : CircleHelp;
-    return <span className={`pill ${status}`} title={status === "verified" ? "Gym attendance confirmed by staff. Exercise details remain self-reported." : undefined}><Icon size={13}/>{status === "verified" ? "Verified visit" : status === "pending" ? "Pending review" : "Needs attention"}</span>;
+    const Icon = status === "verified" ? ShieldCheck : status === "pending" || status === "manual" ? Clock3 : CircleHelp;
+    return <span className={`pill ${status}`} title={status === "verified" ? "Gym attendance confirmed by staff. Exercise details remain self-reported." : undefined}><Icon size={13}/>{status === "verified" ? "Verified visit" : status === "pending" ? "Pending review" : status === "manual" ? "Manual log" : "Needs attention"}</span>;
 }
 export function Empty({ icon, title, text, children }: {
     icon: ReactNode;
@@ -70,9 +71,10 @@ export function WorkoutCard({ session, member, viewerId, busy, onOpen, onCheer, 
       <Pill status={session.status}/>
     </div>
     <button className="workout-title" onClick={() => onOpen(session)}>{session.title}<ArrowUpRight size={17}/></button>
+    <TimingSummary session={session}/>
     {session.notes && <p className="workout-note">{session.notes}</p>}
     <div className="workout-metrics">
-      <span><small>Duration</small><strong>{session.duration}<em>min</em></strong></span>
+      <span><small>{session.timingSource === "scan" ? "Scan duration" : "Manual duration"}</small><strong>{session.duration}<em>min</em></strong></span>
       <span><small>{exercises.length ? "Exercises" : "Activity"}</small><strong>{exercises.length || session.type}</strong></span>
       <span><small>Logged volume</small><strong>{volume ? volume.toLocaleString("en-IN") : "N/A"}{volume > 0 && <em>kg</em>}</strong></span>
     </div>

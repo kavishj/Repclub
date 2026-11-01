@@ -23,8 +23,13 @@ export const sessions = sqliteTable("sessions", {
   type: text("type").notNull(), date: text("date").notNull(), duration: integer("duration").notNull(),
   notes: text("notes").notNull(), exercises: text("exercises").notNull(), status: text("status").notNull(),
   deskSupported: integer("desk_supported").notNull().default(0), createdAt: integer("created_at").notNull(),
+  timingSource: text("timing_source").notNull().default("manual"),
+  startedAt: integer("started_at"), endedAt: integer("ended_at"),
   reviewedBy: text("reviewed_by"), reviewedAt: integer("reviewed_at"), reviewNote: text("review_note"),
-}, t => [index("sessions_campus").on(t.campusId), uniqueIndex("one_active_session_per_day").on(t.userId, t.date).where(sql`${t.status} != 'declined'`)]);
+}, t => [index("sessions_campus").on(t.campusId),
+  uniqueIndex("one_active_session_per_day").on(t.userId, t.date).where(sql`${t.timingSource} = 'scan' AND ${t.status} != 'declined'`),
+  uniqueIndex("one_running_session_per_user").on(t.userId).where(sql`${t.status} = 'recording'`),
+]);
 export const cheers = sqliteTable("cheers", {
   id: text("id").primaryKey(), sessionId: text("session_id").notNull().references(() => sessions.id), userId: text("user_id").notNull().references(() => members.userId),
 }, t => [uniqueIndex("cheer_once").on(t.sessionId, t.userId)]);

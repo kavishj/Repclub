@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { dayKey, weekKey, statsFor, rankMembers, newMilestone } from '../lib/league.ts';
+import { dayKey, weekKey, statsFor, rankMembers, newMilestone, countsForRewards, badgeList } from '../lib/league.ts';
 const now = Date.parse('2026-10-31T10:00:00Z');
 const member = {userId:'a',campusId:'c',name:'A',role:'member',goal:3,days:'[0,2,4]',squadId:null,joinedAt:0};
-const session = (date,status='verified',userId='a') => ({id:crypto.randomUUID(),campusId:'c',userId,date,status});
+const session = (date,status='verified',userId='a') => {const startedAt=Date.parse(date+'T08:00:00+05:30');return {id:crypto.randomUUID(),campusId:'c',userId,date,status,timingSource:'scan',startedAt,endedAt:startedAt+45*60000,duration:45};};
 test('India day and Monday rollover use the actual India boundary', () => {
  assert.equal(dayKey(Date.parse('2026-11-01T18:29:00Z')),'2026-11-01');
  assert.equal(dayKey(Date.parse('2026-11-01T18:30:00Z')),'2026-11-02');
@@ -48,4 +48,30 @@ test('new verified visits celebrate goal completion and newly earned badges once
  assert.equal(newMilestone(previous,complete),'Weekly goal complete');
  assert.equal(newMilestone(complete,complete),null);
  assert.equal(newMilestone(progressState({...before,total:0}),progressState({...before,total:1})),'Unlocked: First visit');
+});
+
+test('manual, legacy, incomplete, and client-edited durations earn no points or achievements', () => {
+ const valid=session('2026-10-26');
+ const invalid=[{...valid,timingSource:'manual'},{...valid,timingSource:undefined,startedAt:undefined,endedAt:undefined},{...valid,endedAt:null},{...valid,startedAt:null},{...valid,duration:200},{...valid,endedAt:valid.startedAt-1},{...valid,date:'2026-10-27'},{...valid,endedAt:now+60000}];
+ for(const entry of invalid){
+  assert.equal(countsForRewards(entry,now),false);
+  const stats=statsFor(member,[entry],[],now);
+  assert.equal(stats.total,0);assert.equal(stats.xp,0);assert.equal(stats.percent,0);
+  assert.ok(badgeList(stats).every(badge=>!badge.earned));
+ }
+ assert.equal(countsForRewards(valid,now),true);
+});
+test('reward time boundaries use exact elapsed milliseconds, including checkout across midnight', () => {
+ const startedAt=Date.parse('2026-10-26T23:55:00+05:30');
+ const base={...session('2026-10-26'),startedAt};
+ for(const [elapsed,expected] of [[299999,false],[300000,true],[14400000,true],[14400001,false]]){
+  const entry={...base,endedAt:startedAt+elapsed,duration:Math.floor(elapsed/60000)};
+  assert.equal(countsForRewards(entry,now),expected);
+ }
+});
+test('manual logs cannot improve rankings or create comeback and multiweek badges', () => {
+ const all=['2026-10-05','2026-10-07','2026-10-09','2026-10-19','2026-10-21','2026-10-23','2026-10-26','2026-10-28','2026-10-30'].map(date=>({...session(date),timingSource:'manual'}));
+ const stats=statsFor(member,all,[],now);assert.equal(stats.xp,0);assert.equal(stats.goalWeeks,0);assert.equal(stats.comeback,false);
+ const ranked=rankMembers([member,{...member,userId:'b',name:'B'}],[...all,session('2026-10-26','verified','b')],[],now);
+ assert.equal(ranked[0].userId,'b');assert.equal(ranked.find(m=>m.userId==='a').stats.percent,0);
 });

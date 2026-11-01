@@ -387,7 +387,6 @@ kbd { font-size: 10px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
 .desk-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; }
 .desk-code-card, .pilot-summary { padding: 23px; }
 .desk-code-card > p { color: var(--muted); font-size: 12px; line-height: 1.8; max-width: 390px; }
-.desk-code { font-size: 45px; font-weight: 600; letter-spacing: 8px; font-variant-numeric: tabular-nums; margin: 24px 0; color: var(--accent-text); }
 .desk-code-footer { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
 .desk-code-footer small { color: var(--muted); font-size: 11px; }
 .desk-code-footer .btn { font-size: 11px; }
@@ -580,7 +579,6 @@ kbd { font-size: 10px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
   .quick-stat-icon { width: 32px; height: 32px; }
   .quick-stats > button > svg { display: block; }
   .page-date { display: none; }
-  .desk-code { font-size: 37px; letter-spacing: 6px; }
   .desk-code-card, .pilot-summary { padding: 20px; }
   .desk-code-footer { flex-wrap: wrap; gap: 9px; }
   .badge-art { width: 47px; height: 47px; }
@@ -674,7 +672,6 @@ kbd { font-size: 10px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
   .xp-total { font-size: 27px; gap: 5px; }
   .xp-total small { font-size: 10px; }
   .desk-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
-  .desk-code { font-size: 37px; }
   .desk-code-card .section-heading h2 { font-size: 16px; }
   .desk-code-card > p { font-size: 11px; }
   .review-row { flex-wrap: wrap; padding: 18px; gap: 11px; }
@@ -798,7 +795,6 @@ kbd { font-size: 10px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
   .desk-grid { grid-template-columns: 1fr; }
   .desk-code-card, .pilot-summary { padding: 20px; }
   .desk-code-card .section-heading h2 { font-size: 17px; }
-  .desk-code { font-size: 42px; letter-spacing: 9px; margin: 21px 0; }
   .desk-code-footer { flex-wrap: nowrap; }
   .review-row > div { min-width: 175px; }
   .review-row small { font-size: 10px; line-height: 1.8; }
@@ -951,3 +947,40 @@ kbd { font-size: 10px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
 .app-notice[data-type="error"] [data-icon] { color: var(--danger); }
 [data-sonner-toast].app-notice [data-close-button] { background: var(--panel-alt); color: var(--muted); border-color: var(--line); }
 @keyframes hint-in { from { opacity: 0; translate: 0 3px; } to { opacity: 1; translate: 0 0; } }
+
+/* Scan-timed workouts */
+.workout-session { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; align-items: center; gap: 17px; padding: 20px; margin-bottom: 22px; }
+.session-symbol { width: 44px; height: 44px; border-radius: 11px; color: var(--accent-text); background: var(--accent-soft); display: grid; place-items: center; }
+.session-copy h2 { font-size: 16px; }
+.session-copy p { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.7; }
+.session-copy > small { display: block; color: var(--muted); font-size: 10px; }
+.session-clock { display: block; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; font-size: 28px; letter-spacing: -.8px; line-height: 1.6; color: var(--accent-text); }
+.session-actions { display: flex; align-items: center; justify-content: flex-end; gap: 9px; flex-wrap: wrap; max-width: 350px; }
+.session-actions .btn { min-height: 39px; font-size: 11px; }
+.session-actions .text-button { font-size: 10px; margin-left: auto; }
+.running .session-actions { max-width: 260px; }
+.timing-summary { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; line-height: 1.7; margin: 9px 0 13px; }
+.timing-summary.scan-timed > svg { color: var(--accent-text); }
+.pill.manual { color: var(--muted); background: var(--panel-alt); }
+.scan-times { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; padding: 15px; margin: 15px 0; border: 1px solid var(--line); border-radius: 8px; }
+.scan-times span { font-size: 10px; color: var(--muted); }
+.scan-times strong { display: block; font-size: 11px; color: var(--text); margin-top: 5px; line-height: 1.7; }
+.readonly-value { display: block; min-height: 43px; margin-top: 7px; padding: 12px; background: var(--panel-alt); border: 1px solid var(--line); border-radius: 7px; color: var(--muted); font-size: 12px; }
+.camera-frame { position: relative; width: 100%; aspect-ratio: 1; max-height: 340px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel-alt); display: grid; place-items: center; overflow: hidden; color: var(--muted); }
+.camera-frame video { width: 100%; height: 100%; object-fit: cover; }
+.scan-guide { position: absolute; inset: 20%; border: 2px solid var(--accent); border-radius: 13px; pointer-events: none; opacity: .4; }
+.camera-active .scan-guide { opacity: .9; box-shadow: 0 0 0 100px #00000030; }
+.qr-scanner .fine-print { margin-top: 16px; text-align: center; }
+.gym-qr { width: min(100%,280px); aspect-ratio: 1; margin: 22px auto; background: #fff; border-radius: 9px; overflow: hidden; }
+.gym-qr img { display: block; width: 100%; height: 100%; }
+.gym-qr > div { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; color: #667080; font-size: 12px; }
+@media (max-width:760px) {
+  .workout-session { grid-template-columns: 40px minmax(0,1fr); padding: 18px; gap: 13px; }
+  .session-symbol { width: 40px; height: 40px; }
+  .session-actions, .running .session-actions { grid-column: 1 / -1; max-width: none; justify-content: flex-start; }
+  .session-actions .btn { flex: 1; }
+  .session-actions .text-button { margin: 3px auto 0; }
+  .running .session-actions .text-button { flex-basis: 100%; justify-content: center; }
+  .session-clock { font-size: 27px; }
+  .timing-summary { font-size: 10px; }
+}
