@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `one_active_session_per_day` ON `sessions` (`user_id`,`date`) WHERE "sessions"."status" != 'declined';
