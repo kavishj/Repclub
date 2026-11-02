@@ -1,0 +1,828 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-02T23:56:54Z",
+  "title": "Design System: RepClub: Clubhouse",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Club Lime",
+        "tonalRamp": [
+          "oklch(15% 0.0805 127.43)",
+          "oklch(25% 0.1342 127.43)",
+          "oklch(35% 0.1879 127.43)",
+          "oklch(47% 0.1879 127.43)",
+          "oklch(59% 0.1879 127.43)",
+          "oklch(71% 0.1879 127.43)",
+          "oklch(83% 0.1278 127.43)",
+          "oklch(95% 0.0376 127.43)"
+        ]
+      },
+      "accent-text-light": {
+        "role": "primary",
+        "displayName": "Deep Lime (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0528 129.31)",
+          "oklch(25% 0.0880 129.31)",
+          "oklch(35% 0.1231 129.31)",
+          "oklch(47% 0.1231 129.31)",
+          "oklch(59% 0.1231 129.31)",
+          "oklch(71% 0.1231 129.31)",
+          "oklch(83% 0.0837 129.31)",
+          "oklch(95% 0.0246 129.31)"
+        ]
+      },
+      "bg-dark": {
+        "role": "neutral",
+        "displayName": "Page (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0049 254.07)",
+          "oklch(25% 0.0082 254.07)",
+          "oklch(35% 0.0114 254.07)",
+          "oklch(47% 0.0114 254.07)",
+          "oklch(59% 0.0114 254.07)",
+          "oklch(71% 0.0114 254.07)",
+          "oklch(83% 0.0078 254.07)",
+          "oklch(95% 0.0023 254.07)"
+        ]
+      },
+      "panel-dark": {
+        "role": "neutral",
+        "displayName": "Surface (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0072 259.78)",
+          "oklch(25% 0.0119 259.78)",
+          "oklch(35% 0.0167 259.78)",
+          "oklch(47% 0.0167 259.78)",
+          "oklch(59% 0.0167 259.78)",
+          "oklch(71% 0.0167 259.78)",
+          "oklch(83% 0.0114 259.78)",
+          "oklch(95% 0.0033 259.78)"
+        ]
+      },
+      "panel-alt-dark": {
+        "role": "neutral",
+        "displayName": "Inset (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0096 256.40)",
+          "oklch(25% 0.0159 256.40)",
+          "oklch(35% 0.0223 256.40)",
+          "oklch(47% 0.0223 256.40)",
+          "oklch(59% 0.0223 256.40)",
+          "oklch(71% 0.0223 256.40)",
+          "oklch(83% 0.0152 256.40)",
+          "oklch(95% 0.0045 256.40)"
+        ]
+      },
+      "text-dark": {
+        "role": "neutral",
+        "displayName": "Primary Ink (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0034 253.86)",
+          "oklch(25% 0.0057 253.86)",
+          "oklch(35% 0.0080 253.86)",
+          "oklch(47% 0.0080 253.86)",
+          "oklch(59% 0.0080 253.86)",
+          "oklch(71% 0.0080 253.86)",
+          "oklch(83% 0.0055 253.86)",
+          "oklch(95% 0.0016 253.86)"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Secondary Ink (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0129 254.71)",
+          "oklch(25% 0.0215 254.71)",
+          "oklch(35% 0.0300 254.71)",
+          "oklch(47% 0.0300 254.71)",
+          "oklch(59% 0.0300 254.71)",
+          "oklch(71% 0.0300 254.71)",
+          "oklch(83% 0.0204 254.71)",
+          "oklch(95% 0.0060 254.71)"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Soft Separator (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0131 257.68)",
+          "oklch(25% 0.0219 257.68)",
+          "oklch(35% 0.0306 257.68)",
+          "oklch(47% 0.0306 257.68)",
+          "oklch(59% 0.0306 257.68)",
+          "oklch(71% 0.0306 257.68)",
+          "oklch(83% 0.0208 257.68)",
+          "oklch(95% 0.0061 257.68)"
+        ]
+      },
+      "control-line-dark": {
+        "role": "neutral",
+        "displayName": "Control Edge (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0143 256.07)",
+          "oklch(25% 0.0238 256.07)",
+          "oklch(35% 0.0334 256.07)",
+          "oklch(47% 0.0334 256.07)",
+          "oklch(59% 0.0334 256.07)",
+          "oklch(71% 0.0334 256.07)",
+          "oklch(83% 0.0227 256.07)",
+          "oklch(95% 0.0067 256.07)"
+        ]
+      },
+      "hover-dark": {
+        "role": "neutral",
+        "displayName": "Hover Surface (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0104 258.36)",
+          "oklch(25% 0.0173 258.36)",
+          "oklch(35% 0.0243 258.36)",
+          "oklch(47% 0.0243 258.36)",
+          "oklch(59% 0.0243 258.36)",
+          "oklch(71% 0.0243 258.36)",
+          "oklch(83% 0.0165 258.36)",
+          "oklch(95% 0.0049 258.36)"
+        ]
+      },
+      "accent-ink-dark": {
+        "role": "primary",
+        "displayName": "Lime Ink (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0037 264.35)",
+          "oklch(25% 0.0062 264.35)",
+          "oklch(35% 0.0087 264.35)",
+          "oklch(47% 0.0087 264.35)",
+          "oklch(59% 0.0087 264.35)",
+          "oklch(71% 0.0087 264.35)",
+          "oklch(83% 0.0059 264.35)",
+          "oklch(95% 0.0017 264.35)"
+        ]
+      },
+      "accent-soft-dark": {
+        "role": "primary",
+        "displayName": "Lime Wash (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0159 128.38)",
+          "oklch(25% 0.0265 128.38)",
+          "oklch(35% 0.0371 128.38)",
+          "oklch(47% 0.0371 128.38)",
+          "oklch(59% 0.0371 128.38)",
+          "oklch(71% 0.0371 128.38)",
+          "oklch(83% 0.0252 128.38)",
+          "oklch(95% 0.0074 128.38)"
+        ]
+      },
+      "positive-dark": {
+        "role": "secondary",
+        "displayName": "Attendance Green (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0541 153.35)",
+          "oklch(25% 0.0901 153.35)",
+          "oklch(35% 0.1262 153.35)",
+          "oklch(47% 0.1262 153.35)",
+          "oklch(59% 0.1262 153.35)",
+          "oklch(71% 0.1262 153.35)",
+          "oklch(83% 0.0858 153.35)",
+          "oklch(95% 0.0252 153.35)"
+        ]
+      },
+      "positive-soft-dark": {
+        "role": "secondary",
+        "displayName": "Attendance Wash (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0178 149.09)",
+          "oklch(25% 0.0297 149.09)",
+          "oklch(35% 0.0416 149.09)",
+          "oklch(47% 0.0416 149.09)",
+          "oklch(59% 0.0416 149.09)",
+          "oklch(71% 0.0416 149.09)",
+          "oklch(83% 0.0283 149.09)",
+          "oklch(95% 0.0083 149.09)"
+        ]
+      },
+      "pending-dark": {
+        "role": "secondary",
+        "displayName": "Review Amber (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0479 79.82)",
+          "oklch(25% 0.0798 79.82)",
+          "oklch(35% 0.1117 79.82)",
+          "oklch(47% 0.1117 79.82)",
+          "oklch(59% 0.1117 79.82)",
+          "oklch(71% 0.1117 79.82)",
+          "oklch(83% 0.0759 79.82)",
+          "oklch(95% 0.0223 79.82)"
+        ]
+      },
+      "pending-soft-dark": {
+        "role": "secondary",
+        "displayName": "Review Wash (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0118 78.25)",
+          "oklch(25% 0.0196 78.25)",
+          "oklch(35% 0.0275 78.25)",
+          "oklch(47% 0.0275 78.25)",
+          "oklch(59% 0.0275 78.25)",
+          "oklch(71% 0.0275 78.25)",
+          "oklch(83% 0.0187 78.25)",
+          "oklch(95% 0.0055 78.25)"
+        ]
+      },
+      "danger-dark": {
+        "role": "secondary",
+        "displayName": "Attention Red (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0392 24.34)",
+          "oklch(25% 0.0653 24.34)",
+          "oklch(35% 0.0914 24.34)",
+          "oklch(47% 0.0914 24.34)",
+          "oklch(59% 0.0914 24.34)",
+          "oklch(71% 0.0914 24.34)",
+          "oklch(83% 0.0621 24.34)",
+          "oklch(95% 0.0183 24.34)"
+        ]
+      },
+      "danger-soft-dark": {
+        "role": "secondary",
+        "displayName": "Attention Wash (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0161 24.94)",
+          "oklch(25% 0.0269 24.94)",
+          "oklch(35% 0.0376 24.94)",
+          "oklch(47% 0.0376 24.94)",
+          "oklch(59% 0.0376 24.94)",
+          "oklch(71% 0.0376 24.94)",
+          "oklch(83% 0.0256 24.94)",
+          "oklch(95% 0.0075 24.94)"
+        ]
+      },
+      "purple-dark": {
+        "role": "secondary",
+        "displayName": "Achievement Violet (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0340 296.03)",
+          "oklch(25% 0.0567 296.03)",
+          "oklch(35% 0.0794 296.03)",
+          "oklch(47% 0.0794 296.03)",
+          "oklch(59% 0.0794 296.03)",
+          "oklch(71% 0.0794 296.03)",
+          "oklch(83% 0.0540 296.03)",
+          "oklch(95% 0.0159 296.03)"
+        ]
+      },
+      "purple-soft-dark": {
+        "role": "secondary",
+        "displayName": "Violet Wash (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0136 297.77)",
+          "oklch(25% 0.0226 297.77)",
+          "oklch(35% 0.0317 297.77)",
+          "oklch(47% 0.0317 297.77)",
+          "oklch(59% 0.0317 297.77)",
+          "oklch(71% 0.0317 297.77)",
+          "oklch(83% 0.0215 297.77)",
+          "oklch(95% 0.0063 297.77)"
+        ]
+      },
+      "blue-dark": {
+        "role": "secondary",
+        "displayName": "Achievement Blue (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0269 254.49)",
+          "oklch(25% 0.0448 254.49)",
+          "oklch(35% 0.0628 254.49)",
+          "oklch(47% 0.0628 254.49)",
+          "oklch(59% 0.0628 254.49)",
+          "oklch(71% 0.0628 254.49)",
+          "oklch(83% 0.0427 254.49)",
+          "oklch(95% 0.0126 254.49)"
+        ]
+      },
+      "blue-soft-dark": {
+        "role": "secondary",
+        "displayName": "Blue Wash (Dark)",
+        "tonalRamp": [
+          "oklch(15% 0.0129 260.51)",
+          "oklch(25% 0.0215 260.51)",
+          "oklch(35% 0.0301 260.51)",
+          "oklch(47% 0.0301 260.51)",
+          "oklch(59% 0.0301 260.51)",
+          "oklch(71% 0.0301 260.51)",
+          "oklch(83% 0.0205 260.51)",
+          "oklch(95% 0.0060 260.51)"
+        ]
+      },
+      "bg-light": {
+        "role": "neutral",
+        "displayName": "Page (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0049 252.09)",
+          "oklch(25% 0.0081 252.09)",
+          "oklch(35% 0.0114 252.09)",
+          "oklch(47% 0.0114 252.09)",
+          "oklch(59% 0.0114 252.09)",
+          "oklch(71% 0.0114 252.09)",
+          "oklch(83% 0.0077 252.09)",
+          "oklch(95% 0.0023 252.09)"
+        ]
+      },
+      "panel-light": {
+        "role": "neutral",
+        "displayName": "Surface (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0015 247.86)",
+          "oklch(25% 0.0024 247.86)",
+          "oklch(35% 0.0034 247.86)",
+          "oklch(47% 0.0034 247.86)",
+          "oklch(59% 0.0034 247.86)",
+          "oklch(71% 0.0034 247.86)",
+          "oklch(83% 0.0023 247.86)",
+          "oklch(95% 0.0007 247.86)"
+        ]
+      },
+      "panel-alt-light": {
+        "role": "neutral",
+        "displayName": "Inset (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0066 257.20)",
+          "oklch(25% 0.0110 257.20)",
+          "oklch(35% 0.0155 257.20)",
+          "oklch(47% 0.0155 257.20)",
+          "oklch(59% 0.0155 257.20)",
+          "oklch(71% 0.0155 257.20)",
+          "oklch(83% 0.0105 257.20)",
+          "oklch(95% 0.0031 257.20)"
+        ]
+      },
+      "text-light": {
+        "role": "neutral",
+        "displayName": "Primary Ink (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0034 264.43)",
+          "oklch(25% 0.0057 264.43)",
+          "oklch(35% 0.0080 264.43)",
+          "oklch(47% 0.0080 264.43)",
+          "oklch(59% 0.0080 264.43)",
+          "oklch(71% 0.0080 264.43)",
+          "oklch(83% 0.0055 264.43)",
+          "oklch(95% 0.0016 264.43)"
+        ]
+      },
+      "muted-light": {
+        "role": "neutral",
+        "displayName": "Secondary Ink (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0144 256.57)",
+          "oklch(25% 0.0241 256.57)",
+          "oklch(35% 0.0337 256.57)",
+          "oklch(47% 0.0337 256.57)",
+          "oklch(59% 0.0337 256.57)",
+          "oklch(71% 0.0337 256.57)",
+          "oklch(83% 0.0229 256.57)",
+          "oklch(95% 0.0067 256.57)"
+        ]
+      },
+      "line-light": {
+        "role": "neutral",
+        "displayName": "Soft Separator (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0103 256.11)",
+          "oklch(25% 0.0171 256.11)",
+          "oklch(35% 0.0239 256.11)",
+          "oklch(47% 0.0239 256.11)",
+          "oklch(59% 0.0239 256.11)",
+          "oklch(71% 0.0239 256.11)",
+          "oklch(83% 0.0163 256.11)",
+          "oklch(95% 0.0048 256.11)"
+        ]
+      },
+      "control-line-light": {
+        "role": "neutral",
+        "displayName": "Control Edge (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0148 257.26)",
+          "oklch(25% 0.0246 257.26)",
+          "oklch(35% 0.0345 257.26)",
+          "oklch(47% 0.0345 257.26)",
+          "oklch(59% 0.0345 257.26)",
+          "oklch(71% 0.0345 257.26)",
+          "oklch(83% 0.0234 257.26)",
+          "oklch(95% 0.0069 257.26)"
+        ]
+      },
+      "hover-light": {
+        "role": "neutral",
+        "displayName": "Hover Surface (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0066 257.20)",
+          "oklch(25% 0.0110 257.20)",
+          "oklch(35% 0.0155 257.20)",
+          "oklch(47% 0.0155 257.20)",
+          "oklch(59% 0.0155 257.20)",
+          "oklch(71% 0.0155 257.20)",
+          "oklch(83% 0.0105 257.20)",
+          "oklch(95% 0.0031 257.20)"
+        ]
+      },
+      "accent-ink-light": {
+        "role": "primary",
+        "displayName": "Lime Ink (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0034 264.43)",
+          "oklch(25% 0.0057 264.43)",
+          "oklch(35% 0.0080 264.43)",
+          "oklch(47% 0.0080 264.43)",
+          "oklch(59% 0.0080 264.43)",
+          "oklch(71% 0.0080 264.43)",
+          "oklch(83% 0.0055 264.43)",
+          "oklch(95% 0.0016 264.43)"
+        ]
+      },
+      "accent-soft-light": {
+        "role": "primary",
+        "displayName": "Lime Wash (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0116 127.75)",
+          "oklch(25% 0.0193 127.75)",
+          "oklch(35% 0.0270 127.75)",
+          "oklch(47% 0.0270 127.75)",
+          "oklch(59% 0.0270 127.75)",
+          "oklch(71% 0.0270 127.75)",
+          "oklch(83% 0.0183 127.75)",
+          "oklch(95% 0.0054 127.75)"
+        ]
+      },
+      "positive-light": {
+        "role": "secondary",
+        "displayName": "Attendance Green (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0520 150.20)",
+          "oklch(25% 0.0867 150.20)",
+          "oklch(35% 0.1214 150.20)",
+          "oklch(47% 0.1214 150.20)",
+          "oklch(59% 0.1214 150.20)",
+          "oklch(71% 0.1214 150.20)",
+          "oklch(83% 0.0826 150.20)",
+          "oklch(95% 0.0243 150.20)"
+        ]
+      },
+      "positive-soft-light": {
+        "role": "secondary",
+        "displayName": "Attendance Wash (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0158 150.27)",
+          "oklch(25% 0.0263 150.27)",
+          "oklch(35% 0.0368 150.27)",
+          "oklch(47% 0.0368 150.27)",
+          "oklch(59% 0.0368 150.27)",
+          "oklch(71% 0.0368 150.27)",
+          "oklch(83% 0.0250 150.27)",
+          "oklch(95% 0.0074 150.27)"
+        ]
+      },
+      "pending-light": {
+        "role": "secondary",
+        "displayName": "Review Amber (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0449 80.09)",
+          "oklch(25% 0.0749 80.09)",
+          "oklch(35% 0.1049 80.09)",
+          "oklch(47% 0.1049 80.09)",
+          "oklch(59% 0.1049 80.09)",
+          "oklch(71% 0.1049 80.09)",
+          "oklch(83% 0.0713 80.09)",
+          "oklch(95% 0.0210 80.09)"
+        ]
+      },
+      "pending-soft-light": {
+        "role": "secondary",
+        "displayName": "Review Wash (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0109 78.92)",
+          "oklch(25% 0.0182 78.92)",
+          "oklch(35% 0.0255 78.92)",
+          "oklch(47% 0.0255 78.92)",
+          "oklch(59% 0.0255 78.92)",
+          "oklch(71% 0.0255 78.92)",
+          "oklch(83% 0.0174 78.92)",
+          "oklch(95% 0.0051 78.92)"
+        ]
+      },
+      "danger-light": {
+        "role": "secondary",
+        "displayName": "Attention Red (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0710 27.33)",
+          "oklch(25% 0.1183 27.33)",
+          "oklch(35% 0.1657 27.33)",
+          "oklch(47% 0.1657 27.33)",
+          "oklch(59% 0.1657 27.33)",
+          "oklch(71% 0.1657 27.33)",
+          "oklch(83% 0.1126 27.33)",
+          "oklch(95% 0.0331 27.33)"
+        ]
+      },
+      "danger-soft-light": {
+        "role": "secondary",
+        "displayName": "Attention Wash (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0119 25.85)",
+          "oklch(25% 0.0199 25.85)",
+          "oklch(35% 0.0278 25.85)",
+          "oklch(47% 0.0278 25.85)",
+          "oklch(59% 0.0278 25.85)",
+          "oklch(71% 0.0278 25.85)",
+          "oklch(83% 0.0189 25.85)",
+          "oklch(95% 0.0056 25.85)"
+        ]
+      },
+      "purple-light": {
+        "role": "secondary",
+        "displayName": "Achievement Violet (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0559 297.56)",
+          "oklch(25% 0.0932 297.56)",
+          "oklch(35% 0.1305 297.56)",
+          "oklch(47% 0.1305 297.56)",
+          "oklch(59% 0.1305 297.56)",
+          "oklch(71% 0.1305 297.56)",
+          "oklch(83% 0.0888 297.56)",
+          "oklch(95% 0.0261 297.56)"
+        ]
+      },
+      "purple-soft-light": {
+        "role": "secondary",
+        "displayName": "Violet Wash (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0065 302.55)",
+          "oklch(25% 0.0109 302.55)",
+          "oklch(35% 0.0152 302.55)",
+          "oklch(47% 0.0152 302.55)",
+          "oklch(59% 0.0152 302.55)",
+          "oklch(71% 0.0152 302.55)",
+          "oklch(83% 0.0104 302.55)",
+          "oklch(95% 0.0030 302.55)"
+        ]
+      },
+      "blue-light": {
+        "role": "secondary",
+        "displayName": "Achievement Blue (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0423 256.39)",
+          "oklch(25% 0.0706 256.39)",
+          "oklch(35% 0.0988 256.39)",
+          "oklch(47% 0.0988 256.39)",
+          "oklch(59% 0.0988 256.39)",
+          "oklch(71% 0.0988 256.39)",
+          "oklch(83% 0.0672 256.39)",
+          "oklch(95% 0.0198 256.39)"
+        ]
+      },
+      "blue-soft-light": {
+        "role": "secondary",
+        "displayName": "Blue Wash (Light)",
+        "tonalRamp": [
+          "oklch(15% 0.0076 253.34)",
+          "oklch(25% 0.0127 253.34)",
+          "oklch(35% 0.0177 253.34)",
+          "oklch(47% 0.0177 253.34)",
+          "oklch(59% 0.0177 253.34)",
+          "oklch(71% 0.0177 253.34)",
+          "oklch(83% 0.0121 253.34)",
+          "oklch(95% 0.0035 253.34)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "page-title": {
+        "displayName": "Page Title",
+        "purpose": "Desktop page headings."
+      },
+      "page-title-mobile": {
+        "displayName": "Page Title Mobile",
+        "purpose": "Page headings at the phone navigation breakpoint."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Weekly commitment, activity and workout-entry headings."
+      },
+      "workout-name": {
+        "displayName": "Workout Name",
+        "purpose": "Editable workout title and elapsed-time emphasis."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Base application copy."
+      },
+      "body-relaxed": {
+        "displayName": "Body Relaxed",
+        "purpose": "Workout notes and session explanations."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Primary and secondary action labels."
+      },
+      "field": {
+        "displayName": "Field",
+        "purpose": "Editable field values, including phone controls."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Metadata, dates and subordinate labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "flat",
+        "value": "none",
+        "purpose": "Shared cards and home panels at rest."
+      },
+      {
+        "name": "popup",
+        "value": "0 8px 24px #00000024",
+        "purpose": "Activity and exercise menus."
+      },
+      {
+        "name": "running-session",
+        "value": "0 8px 24px #00000014",
+        "purpose": "Sticky active-session surface outside home."
+      },
+      {
+        "name": "dialog",
+        "value": "0 30px 100px #00000050",
+        "purpose": "Modal dialog over the dimmed and blurred backdrop."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-transition",
+        "value": ".16s",
+        "purpose": "Shared background, border, shadow and colour transitions."
+      },
+      {
+        "name": "popup-transition",
+        "value": ".16s ease-out",
+        "purpose": "Popup opacity and transform; reduced motion disables transitions."
+      },
+      {
+        "name": "derived-total",
+        "value": "180ms",
+        "purpose": "NumberFlow derived totals, not editable values."
+      },
+      {
+        "name": "application-motion",
+        "value": "200ms",
+        "purpose": "MotionConfig default with reducedMotion set to user."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "home-gutters",
+        "value": "1000px"
+      },
+      {
+        "name": "home-stack",
+        "value": "800px"
+      },
+      {
+        "name": "phone-navigation",
+        "value": "760px"
+      },
+      {
+        "name": "compact-entry",
+        "value": "520px"
+      },
+      {
+        "name": "small-header",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary-dark",
+      "description": "The shared lime action; the active theme supplies its label ink.",
+      "html": "<button class=\"ds-btn-primary\">Scan to start</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1px solid transparent;border-radius:var(--control-radius,999px);font:600 13px/1.5 system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;padding:10px 16px;white-space:nowrap;cursor:pointer;transition:background-color .16s,border-color .16s,box-shadow .16s,color .16s;background:var(--accent,#b9f25b);color:var(--accent-ink,#131519);border-color:var(--accent,#b9f25b)}.ds-btn-primary:hover:not(:disabled){background:color-mix(in srgb,var(--accent,#b9f25b) 88%,var(--panel,#20252d))}.ds-btn-primary:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}.ds-btn-primary:disabled{opacity:.45;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-btn-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary-dark",
+      "description": "A quieter companion action with a visible control boundary.",
+      "html": "<button class=\"ds-btn-secondary\">Manual log</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1px solid transparent;border-radius:var(--control-radius,999px);font:600 13px/1.5 system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;padding:10px 16px;white-space:nowrap;cursor:pointer;transition:background-color .16s,border-color .16s,box-shadow .16s,color .16s;background:var(--panel,#20252d);color:var(--text,#e5e9ee);border-color:var(--control-line,#748295)}.ds-btn-secondary:hover:not(:disabled){background:var(--hover,#2a323e);border-color:var(--muted,#aab8ca)}.ds-btn-secondary:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}.ds-btn-secondary:disabled{opacity:.45;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-btn-secondary{transition:none}}"
+    },
+    {
+      "name": "Text Action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "An accent-text action for planning and small supporting tasks.",
+      "html": "<button class=\"ds-btn-text\">Edit plan</button>",
+      "css": ".ds-btn-text{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0;border:0;background:transparent;color:var(--accent-text,#b9f25b);font:500 12px/1.5 system-ui,sans-serif;cursor:pointer;transition:color .16s}.ds-btn-text:hover{text-decoration:underline;text-underline-offset:4px}.ds-btn-text:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}.ds-btn-text:disabled{opacity:.45;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-btn-text{transition:none}}"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "A circular, labelled utility action for a close or appearance control.",
+      "html": "<button class=\"ds-btn-icon\" aria-label=\"Close workout editor\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button>",
+      "css": ".ds-btn-icon{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:10px;border:0;border-radius:50%;background:transparent;color:var(--muted,#aab8ca);cursor:pointer;transition:background-color .16s,color .16s}.ds-btn-icon:hover{background:var(--hover,#2a323e);color:var(--text,#e5e9ee)}.ds-btn-icon:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}.ds-btn-icon:disabled{opacity:.45;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-btn-icon{transition:none}}"
+    },
+    {
+      "name": "Exercise Search Field",
+      "kind": "input",
+      "refersTo": "input-dark",
+      "description": "The free-text exercise input; the app attaches Base UI autocomplete.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-exercise\">Exercise</label><div class=\"ds-search\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input id=\"ds-exercise\" placeholder=\"Search or name an exercise\" autocomplete=\"off\"/></div>",
+      "css": ".ds-field-label{display:block;font:400 12px/1.5 system-ui,sans-serif;color:var(--muted,#aab8ca)}.ds-search{display:flex;align-items:center;gap:8px;margin-top:8px;border:1px solid var(--control-line,#748295);background:var(--panel,#20252d);border-radius:var(--control-radius,999px);padding-left:12px;color:var(--muted,#aab8ca)}.ds-search:focus-within{outline:2px solid var(--accent-text,#b9f25b);outline-offset:2px}.ds-search input{width:100%;min-width:0;min-height:44px;padding:12px 12px 12px 0;border:0;border-radius:inherit;background:transparent;color:var(--text,#e5e9ee);font:400 16px/1.5 system-ui,sans-serif;outline:none;caret-color:var(--accent-text,#b9f25b)}.ds-search input::placeholder{color:var(--muted,#aab8ca);opacity:1}.ds-search input:disabled{opacity:.45}"
+    },
+    {
+      "name": "Compact Select",
+      "kind": "input",
+      "refersTo": "select",
+      "description": "Pill activity trigger; the application supplies the Base UI popup and selection behavior.",
+      "html": "<button class=\"ds-select\" type=\"button\" aria-label=\"Workout activity\" aria-haspopup=\"listbox\"><span>Strength</span><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+      "css": ".ds-select{display:flex;align-items:center;justify-content:space-between;gap:8px;width:200px;min-height:44px;padding:10px 14px;border:1px solid transparent;border-radius:var(--control-radius,999px);background:var(--panel-alt,#2f3742);color:var(--text,#e5e9ee);font:400 16px/1.5 system-ui,sans-serif;text-align:left;cursor:pointer;transition:background-color .16s,border-color .16s,color .16s}.ds-select:focus-visible,.ds-select[data-popup-open]{outline:2px solid var(--accent-text,#b9f25b);outline-offset:2px}.ds-select:disabled{opacity:.45;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-select{transition:none}}"
+    },
+    {
+      "name": "Numeric Entry",
+      "kind": "input",
+      "refersTo": "number-field",
+      "description": "A centred tabular value with decrement and increment targets; Base UI owns number behavior in the app.",
+      "html": "<label class=\"ds-number-label\" for=\"ds-sets\">Sets</label><div class=\"ds-number\"><button class=\"ds-step\" type=\"button\" aria-label=\"Decrease sets\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/></svg></button><input id=\"ds-sets\" inputmode=\"numeric\" value=\"3\" aria-label=\"Sets\"/><button class=\"ds-step\" type=\"button\" aria-label=\"Increase sets\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg></button></div>",
+      "css": ".ds-number-label{display:block;font:400 12px/1.5 system-ui,sans-serif;color:var(--muted,#aab8ca)}.ds-number{display:grid;grid-template-columns:28px minmax(0,1fr) 28px;align-items:center;width:200px;margin-top:8px;border-radius:16px;overflow:hidden;background:var(--panel-alt,#2f3742)}.ds-number:focus-within{outline:2px solid var(--accent-text,#b9f25b);outline-offset:2px}.ds-number input{width:100%;min-width:0;min-height:44px;padding:8px 0;border:0;background:transparent;color:var(--text,#e5e9ee);text-align:center;font:600 16px/1.5 system-ui,sans-serif;font-variant-numeric:tabular-nums;outline:none}.ds-step{display:grid;place-items:center;min-height:44px;min-width:24px;padding:0;border:0;background:transparent;color:var(--muted,#aab8ca);cursor:pointer;transition:background-color .16s,color .16s}.ds-step:hover{background:var(--hover,#2a323e);color:var(--text,#e5e9ee)}.ds-step:active{background:var(--accent-soft,#212a16)}.ds-step:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}.ds-step:disabled{opacity:.45;cursor:not-allowed}@media(pointer:coarse){.ds-number{grid-template-columns:repeat(2,minmax(0,1fr))}.ds-number input{grid-column:1/-1;grid-row:1}.ds-step{grid-row:2;min-width:44px}}@media(prefers-reduced-motion:reduce){.ds-step{transition:none}}"
+    },
+    {
+      "name": "Desktop Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Horizontal pill destinations with a tonal selected state.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><button aria-current=\"page\">Your squad</button><button>Workouts</button><button>League</button></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-bottom:12px}.ds-nav button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 18px;border:0;border-radius:var(--control-radius,999px);background:transparent;color:var(--muted,#aab8ca);font:400 14px/1.5 system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .16s,color .16s}.ds-nav button:hover{background:var(--hover,#2a323e);color:var(--text,#e5e9ee)}.ds-nav button[aria-current=page]{background:var(--panel,#20252d);color:var(--text,#e5e9ee);font-weight:600}.ds-nav button:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-nav button{transition:none}}"
+    },
+    {
+      "name": "Attendance Status",
+      "kind": "chip",
+      "refersTo": "status-label",
+      "description": "The Clubhouse feed status combines semantic text with an inline SVG icon.",
+      "html": "<span class=\"ds-status\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 12 2 2 4-4\"/><path d=\"M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11\"/></svg>Verified visit</span>",
+      "css": ".ds-status{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:4px 0 4px 8px;border-radius:0;background:transparent;color:var(--positive,#75d294);font:500 12px/1.5 system-ui,sans-serif;white-space:nowrap}.ds-status svg{width:13px;height:13px;flex-shrink:0}"
+    },
+    {
+      "name": "Task Panel",
+      "kind": "card",
+      "refersTo": "panel-dark",
+      "description": "The quiet rounded container used for weekly commitment and workout entry.",
+      "html": "<section class=\"ds-panel\"><h2>Your workout</h2><p>Scan in at the gym, then scan out when you finish.</p></section>",
+      "css": ".ds-panel{min-width:0;padding:24px;border-radius:28px;background:var(--panel,#20252d);color:var(--text,#e5e9ee);box-shadow:none;font:400 14px/1.5 system-ui,sans-serif}.ds-panel h2{margin:0;font-size:20px;font-weight:650;line-height:1.35;letter-spacing:-.02em}.ds-panel p{margin:8px 0 0;color:var(--muted,#aab8ca);font-size:14px;line-height:1.6;max-width:48ch}@media(max-width:1000px){.ds-panel{padding:20px}}@media(max-width:520px){.ds-panel{padding:20px 16px;border-radius:24px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Clubhouse",
+    "overview": "Clubhouse is the user-selected direction for RepClub, recorded on 3 November 2026 after comparing Training log, Clubhouse and Focus. OpenDesigner supplied the starting system and option gallery; Clubhouse maps to its tonal direction. Impeccable's Operate, craft-floor, clarify and polish guidance refines the implementation. The approved Clubhouse variant in `../repclub-mockups.html` is the concept reference; `app/globals.css` and the shipped components are the implementation source of truth.\n\nQuiet typography, soft neutral surfaces and lime actions support a private squad of college gym members in India. Home places friends' workouts and the weekly commitment together, with workout entry beside them on desktop. League, achievements and the staff desk retain their existing functions. The visual language stays compact and friendly through rows, separators and rounded controls, while attendance and reward status remain explicit.",
+    "keyCharacteristics": [
+      "Squad activity and weekly commitment lead the home surface.",
+      "Lime identifies primary actions in both light and dark themes.",
+      "Soft panels contain tasks; rows and separators organise repeated content.",
+      "Compact entry controls preserve a clear place to save details and finish a scan."
+    ],
+    "rules": [
+      {
+        "name": "The Lime Action Rule",
+        "body": "Use the shared lime fill for primary actions and its theme-specific ink for the label. Use the darker accent-text token for links and focus in the light theme.",
+        "section": "colors"
+      },
+      {
+        "name": "The Status Has Words Rule",
+        "body": "Pair attendance colour with a text status and an icon or step; colour alone does not explain verification or reward eligibility.",
+        "section": "colors"
+      },
+      {
+        "name": "The Interface Type Rule",
+        "body": "Use the existing system stack for application headings and controls. Numeric data uses tabular figures; animation belongs to derived totals, never editable caret text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Task Rule",
+        "body": "Keep home panels and feed rows flat at rest. Reserve shadows for floating popups, dialogs and the sticky running-session surface.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve brand lime and the complete light and dark theme mappings.",
+      "Do use one primary action per task group and keep saving details distinct from scan checkout.",
+      "Do organise activity and exercises with rows and separators and keep opened workout entry before the feed on narrow screens.",
+      "Do use real data and a clear recovery action for empty, loading, error, pending, declined, manual and out-of-range states.",
+      "Do keep phone fields at least 16px, retain useful coarse-pointer touch areas, and respect reduced-motion preferences."
+    ],
+    "donts": [
+      "Don't introduce nested cards, metric-tile dashboards, decorative heading icons, eyebrows, progress rings or repeated reward explanations into the approved home and entry surfaces.",
+      "Don't replace an exercise name or previous values while the person is typing; reusing previous values requires an explicit tap.",
+      "Don't imply that manual history, missing checkout, out-of-range duration or pending review has already earned rewards.",
+      "Don't describe source checks or the offline detector as browser approval, responsive measurement or phone-camera verification."
+    ]
+  }
+}

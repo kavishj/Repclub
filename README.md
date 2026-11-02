@@ -26,6 +26,9 @@ A college gym pilot for small friend squads, weekly commitments, staff-reviewed 
 - Required setup is committed atomically; returning members see their saved campus and a checklist of unfinished actions.
 - The demo is opt-in and stays separate from participant records.
 
+- Clubhouse home: squad activity and a weekly attendance strip, horizontal desktop navigation, and a personal workout panel beside the feed. On phones the opened editor moves first; a compact header scan action stays in reach.
+- Impeccable refinement removes decorative heading tiles, repeated status explanations, metric tiles, small labels, and retired sidebar styles.
+- Workout entry is inline. Scan to finish saves entered details before opening QR checkout; closing checkout keeps the editor available.
 - A compact exercise editor with Base UI free-form autocomplete, searchable exercise suggestions, previous-value reuse, accessible selects, and keyboard/touch number steppers.
 - Expandable exercise cards and a sticky save bar. NumberFlow animates summary totals while typed inputs stay stable, with reduced-motion support.
 - Account-scoped workout drafts are saved on the current device for up to seven days, restored on reopen, and cleared on save, discard, or sign-out. Drafts include save references to make uncertain manual-save retries idempotent.
@@ -35,8 +38,8 @@ A college gym pilot for small friend squads, weekly commitments, staff-reviewed 
 - Light, dark, and system appearance preferences, remembered on the current device.
 - Searchable workout history, attendance filters, date ranges, and repeat-workout prefilling.
 - Interactive weekly and 28-day calendars, history bars, member progress, and achievement details.
-- Responsive sidebar and mobile bottom navigation.
-- Motion powers onboarding, page and dialog transitions, press feedback, and like reactions. Its animation features load after the initial render.
+- Horizontal desktop navigation and mobile bottom navigation.
+- Motion powers onboarding, exercise disclosure, dialog transitions, press feedback, and like reactions. Its animation features load after the initial render.
 - Radix Toggle Group provides keyboard navigation for weekly targets and planned days; Radix Tooltip explains icon controls on hover or focus.
 - Sonner handles dismissible, swipeable success and error notices in both themes.
 - Canvas Confetti loads only when setup is finished or a new verified milestone is detected. Pending logs do not trigger milestone rewards. Reduced-motion preferences disable transforms and confetti.

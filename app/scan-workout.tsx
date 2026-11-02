@@ -27,7 +27,9 @@ export function StatusTimeline({session}:{session:Session}) {
     const reason=qualified?"Qualified gym day. XP is capped at your weekly target.":session.timingSource!=="scan"?scannedIn?"Saved without checkout. This visit stays in your history and earns no rewards.":"Manual log. Both gym scans and staff review are needed for rewards.":session.status==="unqualified"?(session.duration<5?"Under 5 minutes. Both scans are saved, but this visit earns no rewards.":"Over 4 hours. Both scans are saved, but this visit earns no rewards."):session.status==="declined"?session.reviewNote||"Attendance was not confirmed. Contact your gym verifier.":session.status==="pending"?"Both scans saved. Awaiting an independent gym staff review.":session.status==="recording"?"Timer running. Scan the gym QR again when you finish.":"This visit does not meet the reward rules.";
     return <section className="status-timeline" aria-label="Workout verification"><ol>{[{label:"Checked in",done:scannedIn},{label:"Checked out",done:scannedOut},{label:"Staff reviewed",done:reviewed},{label:"Reward qualified",done:qualified}].map((step,index)=><li key={step.label} className={step.done?"complete":""}><span>{step.done?<Check size={12}/>:index+1}</span>{step.label}</li>)}</ol><p>{reason}</p></section>;
 }
-export function WorkoutSession({ active, serverNow, receivedAt, busy, onScan, onManual, onDetails, onCancel }: {
+export function WorkoutSession({ active, serverNow, receivedAt, busy, onScan, onManual, onDetails, onCancel, embedded=false, detailsOpen=false }: {
+    embedded?: boolean;
+    detailsOpen?: boolean;
     active: Session | null;
     serverNow: number;
     receivedAt: number;
@@ -50,13 +52,16 @@ export function WorkoutSession({ active, serverNow, receivedAt, busy, onScan, on
         return () => clearInterval(timer);
     }, [active?.id, active?.startedAt, serverNow, receivedAt]);
     const expired = elapsed > MAX_SCAN_DURATION;
+    if(embedded)return <div className={`club-session ${active?"active":""}`} aria-label="Workout timer">
+      {active?<><div className="club-session-time"><ScanLine size={16}/><output role="timer" aria-label="Elapsed workout time">{clock(elapsed)}</output><span>Scanned in {new Date(active.startedAt!).toLocaleTimeString("en-IN",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit"})}</span></div>{expired&&<p className="club-session-warning">Over 4 hours. Checkout will save this visit without rewards.</p>}{!detailsOpen&&<><p className="club-session-name">{active.title}</p><div className="club-session-buttons"><button className="btn secondary" disabled={busy} onClick={()=>onDetails(active)}>Edit details</button><button className="btn primary" disabled={busy} onClick={onScan}><ScanLine size={16}/> Continue workout</button></div></>}{!detailsOpen&&<button className="text-button club-manual-fallback" disabled={busy} onClick={()=>onCancel(active.id)}>Save without checkout</button>}</>:<><p>Scan in at the gym, then scan out when you finish.</p><div className="club-session-buttons"><button className="btn primary" disabled={busy} onClick={onScan}><ScanLine size={16}/> Scan to start</button><button className="btn secondary" disabled={busy} onClick={onManual}>Manual log</button></div><small>Rewards require both scans and staff review.</small></>}
+    </div>;
     return <section className={`card workout-session ${active ? "running" : ""}`} aria-label="Workout timer">
     <span className="session-symbol">{active ? <Clock3 size={22}/> : <ScanLine size={23}/>}</span>
     <div className="session-copy"><h2>{active ? active.title : "Scan in at the gym"}</h2>
       <p>{active ? expired ? "Scan out to end your timer. This visit will stay in history without rewards." : "Scan out when you finish. Staff review unlocks rewards." : "Scan again at checkout to record your duration."}</p>
       {active && <><output className="session-clock" role="timer" aria-label="Elapsed workout time">{clock(elapsed)}</output><small>{elapsed < MIN_SCAN_DURATION ? "Rewards require 5–240 minutes." : `Started ${time(active.startedAt!)}`}</small></>}
     </div>
-    <div className="session-actions"><button className="btn primary" disabled={busy} onClick={onScan}><ScanLine size={16}/>{active ? "Scan to finish" : "Scan to start"}</button>
+    <div className="session-actions"><button className="btn primary" disabled={busy} onClick={onScan}><ScanLine size={16}/>{active ? "Finish workout" : "Scan to start"}</button>
       {active ? <><button className="btn secondary" disabled={busy} onClick={() => onDetails(active)}>Workout details</button><button className="text-button" disabled={busy} onClick={() => onCancel(active.id)}>Save without checkout</button></> : <button className="btn secondary" disabled={busy} onClick={onManual}>Manual log</button>}
     </div>
   </section>;

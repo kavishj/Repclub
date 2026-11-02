@@ -1,7 +1,7 @@
 import { z } from "zod";
 const number=z.number().finite().nullable();
 export const draftSchema=z.object({
-  version:z.literal(1),savedAt:z.number().finite(),requestId:z.string().uuid(),title:z.string().max(80),type:z.enum(["Strength","Cardio","Mixed"]),date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),duration:number,notes:z.string().max(600),
+  version:z.literal(1),finishManually:z.boolean().optional(),savedAt:z.number().finite(),requestId:z.string().uuid(),title:z.string().max(80),type:z.enum(["Strength","Cardio","Mixed"]),date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),duration:number,notes:z.string().max(600),
   exercises:z.array(z.object({id:z.string().uuid(),name:z.string().max(60),sets:number,reps:number,weight:number})).max(12),
 });
 export type WorkoutDraft=z.infer<typeof draftSchema>;

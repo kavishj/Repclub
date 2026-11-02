@@ -1,7 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
 import * as m from "motion/react-m";
-import { TimingSummary } from "./scan-workout";
 import { ArrowRight, ArrowUpRight, ChevronDown, CircleHelp, Clock3, Dumbbell, Heart, RotateCcw, ShieldCheck, Trophy } from "lucide-react";
 import { type RankedMember, type Session } from "../lib/league";
 export type Exercise = {
@@ -71,20 +70,15 @@ export function WorkoutCard({ session, member, viewerId, busy, onOpen, onCheer, 
       <Pill status={session.status}/>
     </div>
     <button className="workout-title" onClick={() => onOpen(session)}>{session.title}<ArrowUpRight size={17}/></button>
-    <TimingSummary session={session}/>
     {session.notes && <p className="workout-note">{session.notes}</p>}
-    <div className="workout-metrics">
-      <span><small>{session.timingSource === "scan" ? "Scan duration" : "Manual duration"}</small><strong>{session.duration}<em>min</em></strong></span>
-      <span><small>{exercises.length ? "Exercises" : "Activity"}</small><strong>{exercises.length || session.type}</strong></span>
-      <span><small>Logged volume</small><strong>{volume ? volume.toLocaleString("en-IN") : "N/A"}{volume > 0 && <em>kg</em>}</strong></span>
-    </div>
+    <div className="workout-facts"><span aria-label={session.timingSource==="scan"?"Scan duration":"Manual duration"}>{session.duration} min</span><span>{exercises.length?`${exercises.length} exercises`:session.type}</span>{volume>0&&<span>{volume.toLocaleString("en-IN")} kg volume</span>}</div>
     {exercises.length > 0 && <details className="exercise-preview">
       <summary><span className="exercise-preview-icons"><Dumbbell size={15}/></span><span>{exercises.slice(0, 2).map(e => e.name).join(" · ")}{exercises.length > 2 ? ` +${exercises.length - 2}` : ""}</span><ChevronDown size={15}/></summary>
       <div className="exercise-preview-list">{exercises.map((exercise, index) => <div key={index}><span>{exercise.name}</span><strong>{exercise.sets} × {exercise.reps}<small>{exercise.weight} kg</small></strong></div>)}</div>
     </details>}
     {session.status === "declined" && <p className="review-note">Staff note: {session.reviewNote}</p>}
     <div className="workout-bottom">
-      <m.button whileTap={{ scale: .9 }} className={`cheer ${session.cheered ? "cheered" : ""}`} disabled={busy} onClick={() => onCheer(session.id)} aria-pressed={!!session.cheered} aria-label={`${session.cheered ? "Unlike" : "Like"} ${session.title}`}><m.span className="cheer-heart" initial={false} animate={{ scale: session.cheered ? [1, 1.3, 1] : 1 }} transition={{ duration: .3 }}><Heart size={17} fill={session.cheered ? "currentColor" : "none"}/></m.span><span>{session.cheers || 0}</span><span className="cheer-label">{session.cheered ? "Liked" : "Like"}</span></m.button>
+      <m.button whileTap={{ scale: .96 }} className={`cheer ${session.cheered ? "cheered" : ""}`} disabled={busy} onClick={() => onCheer(session.id)} aria-pressed={!!session.cheered} aria-label={`${session.cheered ? "Unlike" : "Like"} ${session.title}`}><m.span className="cheer-heart" initial={false} animate={{ scale: session.cheered ? [1, 1.15, 1] : 1 }} transition={{ duration: .3 }}><Heart size={17} fill={session.cheered ? "currentColor" : "none"}/></m.span><span>{session.cheers || 0}</span><span className="cheer-label">{session.cheered ? "Liked" : "Like"}</span></m.button>
       <div className="workout-actions">{isOwn && <button className="subtle-button" onClick={() => onRepeat(session)}><RotateCcw size={14}/> Repeat</button>}<button className="subtle-button" onClick={() => onOpen(session)}>Details <ArrowRight size={14}/></button></div>
     </div>
   </article>;

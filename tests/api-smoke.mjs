@@ -77,7 +77,7 @@ export async function runApiSmoke(db) {
  const finishes=await Promise.all([post(student,{action:'scanFinish',id:sid,code:freshCode}),post(student,{action:'scanFinish',id:sid,code:freshCode})]);
  assert.deepEqual(finishes.map(r=>r.status).sort(),[200,409]);
  s=await state(student);const completed=s.mine.find(item=>item.id===sid);
- assert.equal(s.activeSession,null);assert.equal(completed.startedAt,startedAt);assert.equal(completed.duration,Math.floor((completed.endedAt-completed.startedAt)/60000));assert.equal(completed.duration,45);assert.equal(completed.status,'pending');assert.equal(s.me.stats.xp,0);assert.equal(s.me.stats.total,0);
+ assert.equal(s.activeSession,null);assert.equal(completed.startedAt,startedAt);assert.equal(completed.duration,Math.floor((completed.endedAt-completed.startedAt)/60000));assert.equal(completed.duration,45);assert.equal(completed.status,'pending');assert.equal(completed.title,'Scanned strength');assert.deepEqual(JSON.parse(completed.exercises),manual.exercises);assert.equal(s.me.stats.xp,0);assert.equal(s.me.stats.total,0);
  await act(student,{action:'scanFinish',id:sid,code:freshCode},409);await act(student,{action:'scanCancel',id:sid},409);
  if(completed.date===dayKey()) await act(student,{action:'scanStart',code:freshCode},409);
  await act(student,{action:'review',id:sid,decision:'verified',confirmed:true,note:''},403);
