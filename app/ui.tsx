@@ -25,8 +25,8 @@ export function Avatar({ name, size = "", index = 0 }: {
 export function Pill({ status }: {
     status: string;
 }) {
-    const Icon = status === "verified" ? ShieldCheck : status === "pending" || status === "manual" ? Clock3 : CircleHelp;
-    return <span className={`pill ${status}`} title={status === "verified" ? "Gym attendance confirmed by staff. Exercise details remain self-reported." : undefined}><Icon size={13}/>{status === "verified" ? "Verified visit" : status === "pending" ? "Pending review" : status === "manual" ? "Manual log" : "Needs attention"}</span>;
+    const Icon = status === "verified" ? ShieldCheck : status === "pending" || status === "manual" || status === "unqualified" ? Clock3 : CircleHelp;
+    return <span className={`pill ${status}`} title={status === "verified" ? "Gym attendance confirmed by staff. Exercise details remain self-reported." : undefined}><Icon size={13}/>{status === "verified" ? "Verified visit" : status === "pending" ? "Pending review" : status === "manual" ? "Manual log" : status === "unqualified" ? "History only" : "Needs attention"}</span>;
 }
 export function Empty({ icon, title, text, children }: {
     icon: ReactNode;

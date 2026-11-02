@@ -47,6 +47,11 @@ export async function runApiSmoke(db) {
  await act(student,{action:'plan',goal:2,days:[0,2]});await act(student,{action:'plan',goal:3,days:[0,2,4]});
 
  const code=await qr(owner), otherCode=await qr(outsider);
+ // Rotation must preserve the previous QR until its original displayed expiry.
+ const previousExpiry=Date.now()+11000;
+ await db.prepare('UPDATE desk_codes SET expires_at=? WHERE campus_id=?').bind(previousExpiry,o.campus.id).run();
+ const rotatedCode=await qr(owner);assert.notEqual(rotatedCode,code);
+ const rotated=await db.prepare('SELECT previous_code,previous_expires_at FROM desk_codes WHERE campus_id=?').bind(o.campus.id).first();assert.equal(rotated.previous_code,code);assert.equal(rotated.previous_expires_at,previousExpiry);
  assert.match(code,/^repclub:gym:v1:[a-f0-9]{64}$/);assert.notEqual(code,otherCode);assert.equal((await state(student)).deskCode,null);
  await act(student,{action:'scanStart',code:'000000'},400);
  await act(student,{action:'scanStart',code:otherCode},400);
@@ -60,11 +65,11 @@ export async function runApiSmoke(db) {
  await act(student,{action:'plan',goal:2,days:[0,2]},409);
  const details={action:'workoutDetails',id:sid,title:'Scanned strength',type:'Strength',notes:'Timed visit',exercises:manual.exercises};
  await act(owner,details,409);await act(student,{...details,duration:999},400);await act(student,details);
- await act(student,{action:'scanFinish',id:sid,code},400);
+ assert.equal((await state(student)).activity.goalLocked,true);
  await act(outsider,{action:'scanCancel',id:sid},404);
  await act(outsider,{action:'scanFinish',id:sid,code:otherCode},404);
  const startedAt=await elapsed(sid,45*60000+500);
- await db.prepare('UPDATE desk_codes SET expires_at=? WHERE campus_id=?').bind(Date.now()-1,o.campus.id).run();
+ await db.prepare('UPDATE desk_codes SET expires_at=?,previous_expires_at=? WHERE campus_id=?').bind(Date.now()-1,Date.now()-1,o.campus.id).run();
  await act(student,{action:'scanFinish',id:sid,code},400);
  const freshCode=await qr(owner);assert.notEqual(freshCode,code);
  await act(student,{action:'scanFinish',id:sid,code:otherCode},400);
@@ -85,9 +90,10 @@ export async function runApiSmoke(db) {
  // Abandoned and expired visits remain history-only and release the active-session slot.
  let ownerCode=await qr(owner);await act(owner,{action:'scanStart',code:ownerCode});o=await state(owner);let ownId=o.activeSession.id;
  await act(owner,{action:'scanCancel',id:ownId});o=await state(owner);let saved=o.mine.find(item=>item.id===ownId);
+ assert.equal(o.activity.goalLocked,true);await db.prepare('UPDATE plans SET locked_at=NULL WHERE user_id=? AND week=?').bind(owner,o.week).run();await act(owner,{action:'plan',goal:2,days:[1,4]},409);await act(owner,{action:'plan',goal:3,days:[1,3,5]});
  assert.equal(saved.status,'manual');assert.equal(saved.endedAt,null);assert.equal(saved.timingSource,'manual');assert.equal(o.me.stats.xp,0);assert.equal(o.activeSession,null);
  await act(owner,{action:'scanStart',code:ownerCode});o=await state(owner);ownId=o.activeSession.id;await elapsed(ownId,5*60*60000);
- await act(owner,{action:'scanFinish',id:ownId,code:ownerCode},409);await act(owner,{action:'scanCancel',id:ownId});assert.equal((await state(owner)).me.stats.xp,0);
+ await act(owner,{action:'scanFinish',id:ownId,code:ownerCode});o=await state(owner);assert.equal(o.activeSession,null);const overlong=o.mine.find(s=>s.id===ownId);assert.equal(overlong.status,'unqualified');assert.ok(overlong.endedAt);assert.equal(o.me.stats.xp,0);await act(student,{action:'review',id:ownId,decision:'verified',confirmed:true,note:''},403);
  ownerCode=await qr(owner);await act(owner,{action:'scanStart',code:ownerCode});o=await state(owner);ownId=o.activeSession.id;await elapsed(ownId,6*60000);
  await act(owner,{action:'scanFinish',id:ownId,code:ownerCode});
  await act(owner,{action:'review',id:ownId,decision:'verified',confirmed:true,note:''},403);
@@ -96,7 +102,27 @@ export async function runApiSmoke(db) {
  await act(owner,{action:'cheer',id:sid});assert.equal((await state(owner)).feed.find(item=>item.id===sid).cheers,1);
  await act(owner,{action:'cheer',id:sid});assert.equal((await state(owner)).feed.find(item=>item.id===sid).cheers,0);
  const manualWrites=await Promise.all([post(owner,manual),post(owner,manual)]);assert.deepEqual(manualWrites.map(r=>r.status),[200,200]);assert.equal((await state(owner)).me.stats.xp,10);
+ // Short visits record checkout, earn nothing, and allow a later real attempt.
+ const earlyCode=await qr(owner);await act(invited,{action:'scanStart',code:earlyCode});let early=await state(invited);const earlyId=early.activeSession.id;
+ await act(invited,{action:'scanFinish',id:earlyId,code:earlyCode});early=await state(invited);assert.equal(early.activeSession,null);assert.equal(early.mine.find(s=>s.id===earlyId).status,'unqualified');assert.equal(early.me.stats.xp,0);assert.ok(early.mine[0].endedAt);
+ await act(owner,{action:'review',id:earlyId,decision:'verified',confirmed:true,note:''},409);
+ await act(invited,{action:'scanStart',code:earlyCode});early=await state(invited);const fallbackId=early.activeSession.id,beforeFallback=early.pages.mine.total;
+ const fallback={action:'manualFinish',id:fallbackId,title:'Recovered session',type:'Mixed',duration:32,notes:'No checkout available',exercises:manual.exercises};
+ await act(outsider,fallback,404);await act(invited,fallback);await act(invited,fallback);early=await state(invited);const fallbackSaved=early.mine.find(s=>s.id===fallbackId);
+ assert.equal(early.activeSession,null);assert.equal(early.pages.mine.total,beforeFallback+1);assert.equal(fallbackSaved.status,'manual');assert.equal(fallbackSaved.duration,32);assert.equal(fallbackSaved.endedAt,null);assert.equal(fallbackSaved.title,'Recovered session');await act(invited,{...fallback,title:'Conflicting late edit'},409);assert.equal(early.activity.goalLocked,true);assert.equal(early.me.stats.xp,0);await act(invited,{action:'plan',goal:2,days:[0,2]},409);
+ // A retried manual save uses the same request ID and cannot create duplicates.
+ const requestId=crypto.randomUUID();await Promise.all([act(invited,{...manual,requestId}),act(invited,{...manual,requestId})]);early=await state(invited);assert.equal(early.mine.filter(s=>s.id===requestId).length,1);await act(outsider,{...manual,requestId},409);
+ // Bound initial payloads, deterministic cursors, complete search/export, and campus privacy.
+ const bulkAt=Date.now()+1000;
+ await db.batch(Array.from({length:45},(_,i)=>db.prepare("INSERT INTO sessions (id,campus_id,user_id,title,type,date,duration,notes,exercises,status,timing_source,created_at) VALUES (?,?,?,?,'Strength',?,30,'','[]','manual','manual',?)").bind(`page-${tag}-${String(i).padStart(3,'0')}`,o.campus.id,owner,i===0?'Hidden matching exercise':'Page fixture '+i,dayKey(),bulkAt)));
+ o=await state(owner);assert.equal(o.mine.length,20);assert.ok(o.pages.mine.nextCursor);assert.ok(o.pages.mine.total>=45);assert.equal(o.me.stats.xp,10);assert.ok(o.activity.attendance.some(s=>s.status==='verified'));
+ const seen=new Set();let cursor=null,total;
+ do{const page=await request(owner,'/api/workouts?scope=mine'+(cursor?'&cursor='+encodeURIComponent(cursor):''));assert.ok(page.items.length<=20);total=page.total;for(const item of page.items){assert.ok(!seen.has(item.id));seen.add(item.id);assert.equal(item.userId,owner);}cursor=page.nextCursor;}while(cursor);
+ assert.equal(seen.size,total);const searched=await request(owner,'/api/workouts?scope=mine&q=Hidden%20matching');assert.equal(searched.items.length,1);assert.equal(searched.total,1);
+ const filtered=await request(owner,'/api/workouts?scope=mine&status=manual');assert.ok(filtered.items.every(s=>s.status==='manual'));
+ await request(invited,'/api/workouts?scope=reviews',null,403);await request(owner,'/api/workouts?cursor=bad',null,400);await request(owner,'/api/workouts?from=2026-02-30',null,400);await request(null,'/api/workouts',null,401);
+ const exported=await request(owner,'/api/export');assert.equal(exported.workouts.length,total);assert.ok(exported.workouts.every(s=>s.userId===owner));await request(null,'/api/export',null,401);
  const other=await state(outsider);assert.equal(other.feed.length,0);assert.equal(other.members.length,1);assert.equal(other.reviews.length,0);
  const isolated=await fetch(base+'/',{headers:headers(outsider)});const isolatedHtml=await isolated.text();assert.ok(isolatedHtml.includes('Other Campus '+tag));assert.ok(!isolatedHtml.includes('QA Campus '+tag));
- console.log('PASS: onboarding, manual-log exclusion, scan clocks and reload, expired/foreign QR rejection, forged timestamps, duplicate/concurrent scans, immutable durations, independent review, abandoned sessions, permissions, private feeds, rewards, and durable reload.');
+ console.log('PASS: QR overlap expiry, durable goal locks, atomic manual fallback, short/long checkout, idempotent saves, bounded pagination/search/export, privacy, and onboarding, manual-log exclusion, scan clocks and reload, expired/foreign QR rejection, forged timestamps, duplicate/concurrent scans, immutable durations, independent review, abandoned sessions, permissions, private feeds, rewards, and durable reload.');
 }

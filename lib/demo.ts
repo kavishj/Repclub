@@ -1,4 +1,4 @@
-import { dayKey, shiftDay, weekKey, rankMembers, type AppState, type Member, type Session, type Plan, type Squad } from "./league";
+import { dayKey, shiftDay, weekKey, rankMembers, activitySummary, type AppState, type Member, type Session, type Plan, type Squad } from "./league";
 export function makeDemo() {
   const now = Date.now(), week = weekKey(), campusId = "sample-campus";
   const members: Member[] = [
@@ -30,5 +30,5 @@ export function demoState(d: DemoData): AppState {
   const members = rankMembers(d.members, d.sessions, d.plans), me = members.find(m => m.userId === "you")!;
   const peerIds = new Set(members.filter(m => m.squadId === me.squadId).map(m => m.userId));
   const ordered = [...d.sessions].sort((a,b) => b.createdAt - a.createdAt);
-  return { user: { userId: "you", name: "You" }, campus: d.campus, me, members, squads: d.squads, feed: ordered.filter(s => (s.userId === "you" || peerIds.has(s.userId)) && s.status !== "declined" && s.status !== "recording").slice(0, 40), mine: ordered.filter(s => s.userId === "you" && s.status !== "recording"), activeSession: ordered.find(s => s.userId === "you" && s.status === "recording") ?? null, serverNow: Date.now(), reviews: ordered.filter(s => s.status === "pending"), week: weekKey(), deskCode: d.deskCode, plans: d.plans.filter(p => p.userId === "you") };
+  return { user: { userId: "you", name: "You" }, campus: d.campus, me, members, squads: d.squads, feed: ordered.filter(s => (s.userId === "you" || peerIds.has(s.userId)) && s.status !== "declined" && s.status !== "recording").slice(0, 40), mine: ordered.filter(s => s.userId === "you" && s.status !== "recording"), activeSession: ordered.find(s => s.userId === "you" && s.status === "recording") ?? null, serverNow: Date.now(), reviews: ordered.filter(s => s.status === "pending"), week: weekKey(), deskCode: d.deskCode, plans: d.plans.filter(p => p.userId === "you"), pages:{mine:{nextCursor:null,total:ordered.filter(s=>s.userId==="you"&&s.status!=="recording").length},feed:{nextCursor:null,total:ordered.length},reviews:{nextCursor:null,total:ordered.filter(s=>s.status==="pending").length}},activity:activitySummary(me,d.sessions,d.plans) };
 }

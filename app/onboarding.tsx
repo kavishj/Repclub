@@ -44,6 +44,7 @@ export default function Onboarding(props: Props) {
     const [campusName, setCampusName] = useState("");
     const [gymName, setGymName] = useState("");
     const [code, setCode] = useState("");
+    const [invite,setInvite]=useState("");
     const [goal, setGoal] = useState(3);
     const [days, setDays] = useState<number[]>([0, 2, 4]);
     const [consent, setConsent] = useState(false);
@@ -55,7 +56,8 @@ export default function Onboarding(props: Props) {
     const squad = state?.squads.find(item => item.id === state.me?.squadId);
     const unavailable = loading || !!connectionError || !state;
     useEffect(() => {
-        const initial = new URLSearchParams(window.location.search).get("setup");
+        const params=new URLSearchParams(window.location.search),initial=params.get("setup"),invited=params.get("invite")?.toUpperCase()??"";
+        if(/^[A-Z0-9]{6,12}$/.test(invited)){setCode(invited);setInvite(invited);setMode("joinCampus");if(state?.user)setStep(1);}
         if (initial === "joinCampus" || initial === "createCampus") {
             setMode(initial);
             if (state?.user)
@@ -90,7 +92,7 @@ export default function Onboarding(props: Props) {
         {activeStep === 0 && <>
           <span className="onboarding-icon"><Building2 size={25}/></span><h2 id="onboarding-title" tabIndex={-1}>Your campus</h2><p className="onboarding-help">Join an existing gym or set up a campus pilot.</p>
           <div className="onboarding-choices"><button className={mode === "joinCampus" ? "selected" : ""} onClick={() => { setMode("joinCampus"); props.onClearError(); }} aria-pressed={mode === "joinCampus"}><KeyRound size={23}/><span><strong>Join a campus</strong><small>I have an invite code</small></span>{mode === "joinCampus" ? <Check size={18}/> : <ChevronRight size={17}/>}</button><button className={mode === "createCampus" ? "selected" : ""} onClick={() => { setMode("createCampus"); props.onClearError(); }} aria-pressed={mode === "createCampus"}><Building2 size={23}/><span><strong>Create a campus</strong><small>For gym organizers</small></span>{mode === "createCampus" ? <Check size={18}/> : <ChevronRight size={17}/>}</button></div>
-          {state && !state.user && mode ? <a className="btn primary full" target="_top" href={`/signin-with-chatgpt?return_to=${encodeURIComponent("/?setup=" + mode)}`}>Sign in to continue <ArrowRight size={16}/></a> : <button className="btn primary full" disabled={!mode || unavailable} onClick={() => setStep(1)}>{loading ? <Loader2 size={16} className="spin"/> : null} Continue <ArrowRight size={16}/></button>}
+          {state && !state.user && mode ? <a className="btn primary full" target="_top" href={`/signin-with-chatgpt?return_to=${encodeURIComponent("/?setup=" + mode + (invite?"&invite="+invite:""))}`}>Sign in to continue <ArrowRight size={16}/></a> : <button className="btn primary full" disabled={!mode || unavailable} onClick={() => setStep(1)}>{loading ? <Loader2 size={16} className="spin"/> : null} Continue <ArrowRight size={16}/></button>}
         </>}
         {activeStep === 1 && <>
           <span className="onboarding-icon"><Users size={25}/></span><h2 id="onboarding-title" tabIndex={-1}>Your profile</h2>

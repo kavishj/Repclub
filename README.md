@@ -6,10 +6,13 @@ A college gym pilot for small friend squads, weekly commitments, staff-reviewed 
 
 - Real campus creation and invite-based membership using Sites-managed ChatGPT identity.
 - Campus-scoped member roles; only the campus owner can appoint gym verifiers.
-- Private squad workout feeds, encouragement, and shared invite codes.
+- Private squad workout feeds, encouragement, and invite links that prefill campus or squad codes. Site access is still required.
 - Scan in and scan out at the gym. Start and end timestamps are recorded on the server; duration is read-only and survives refreshes.
+- Previous QR codes remain valid until their original expiry, even when staff refresh the display early.
 - Rotating, campus-scoped QR codes are displayed at the staffed gym desk and expire after two minutes. Camera scanning runs locally with ZXing; QR rendering uses node-qrcode.
 - Only 5–240 minute scan-timed sessions approved by independent staff count toward XP, league progress, weekly goals, and achievements.
+- Every valid checkout is recorded, including visits outside the reward window. Short and overlong visits stay in history without rewards.
+- Manual fallback ends the original running session atomically. The weekly target stays locked after any check-in, including a visit saved without checkout.
 - Manual workouts, abandoned sessions, and legacy logs remain in history but earn no rewards. A manual log does not block a later scan-timed visit on the same date.
 - Workout exercise results and notes can be added while the timer is running or before staff review; scan timestamps and duration cannot be edited.
 - Pending, verified, and needs-attention review states with reviewer attribution.
@@ -23,6 +26,11 @@ A college gym pilot for small friend squads, weekly commitments, staff-reviewed 
 - Required setup is committed atomically; returning members see their saved campus and a checklist of unfinished actions.
 - The demo is opt-in and stays separate from participant records.
 
+- A compact exercise editor with Base UI free-form autocomplete, searchable exercise suggestions, previous-value reuse, accessible selects, and keyboard/touch number steppers.
+- Expandable exercise cards and a sticky save bar. NumberFlow animates summary totals while typed inputs stay stable, with reduced-motion support.
+- Account-scoped workout drafts are saved on the current device for up to seven days, restored on reopen, and cleared on save, discard, or sign-out. Drafts include save references to make uncertain manual-save retries idempotent.
+- Foreground, reconnect, and visible periodic resynchronization, with protection from stale state responses.
+- A compact sticky workout timer, a verification timeline, paginated workout lists, complete filtered history search, and on-demand personal export.
 - A compact activity feed with expandable exercise details, workout detail views, and encouragement.
 - Light, dark, and system appearance preferences, remembered on the current device.
 - Searchable workout history, attendance filters, date ranges, and repeat-workout prefilling.
@@ -45,7 +53,7 @@ Use the Sites development and publication workflow for this checkout. The manage
 
 ```sh
 node node_modules/typescript/bin/tsc --noEmit
-node --experimental-strip-types --test tests/league.test.mjs tests/qr.test.mjs
+node --experimental-strip-types --test tests/league.test.mjs tests/qr.test.mjs tests/draft.test.mjs
 node /root/.codex/plugins/cache/openai-curated-remote/sites/1.1.2/scripts/build-site.mjs
 node --experimental-strip-types tests/worker-smoke.mjs
 ```

@@ -15,7 +15,7 @@ export const members = sqliteTable("members", {
 }, t => [index("members_campus").on(t.campusId)]);
 export const plans = sqliteTable("plans", {
   id: text("id").primaryKey(), userId: text("user_id").notNull().references(() => members.userId),
-  week: text("week").notNull(), goal: integer("goal").notNull(), days: text("days").notNull(),
+  week: text("week").notNull(), goal: integer("goal").notNull(), days: text("days").notNull(), lockedAt: integer("locked_at"),
 }, t => [uniqueIndex("plan_user_week").on(t.userId, t.week)]);
 export const sessions = sqliteTable("sessions", {
   id: text("id").primaryKey(), campusId: text("campus_id").notNull().references(() => campuses.id),
@@ -27,7 +27,9 @@ export const sessions = sqliteTable("sessions", {
   startedAt: integer("started_at"), endedAt: integer("ended_at"),
   reviewedBy: text("reviewed_by"), reviewedAt: integer("reviewed_at"), reviewNote: text("review_note"),
 }, t => [index("sessions_campus").on(t.campusId),
-  uniqueIndex("one_active_session_per_day").on(t.userId, t.date).where(sql`${t.timingSource} = 'scan' AND ${t.status} != 'declined'`),
+  index("sessions_user_history").on(t.userId, t.createdAt, t.id),
+  index("sessions_campus_history").on(t.campusId, t.createdAt, t.id),
+  uniqueIndex("one_active_session_per_day").on(t.userId, t.date).where(sql`${t.timingSource} = 'scan' AND ${t.status} IN ('recording', 'pending', 'verified')`),
   uniqueIndex("one_running_session_per_user").on(t.userId).where(sql`${t.status} = 'recording'`),
 ]);
 export const cheers = sqliteTable("cheers", {
@@ -35,4 +37,5 @@ export const cheers = sqliteTable("cheers", {
 }, t => [uniqueIndex("cheer_once").on(t.sessionId, t.userId)]);
 export const deskCodes = sqliteTable("desk_codes", {
   campusId: text("campus_id").primaryKey().references(() => campuses.id), code: text("code").notNull(), expiresAt: integer("expires_at").notNull(),
+  previousCode: text("previous_code"), previousExpiresAt: integer("previous_expires_at"),
 });

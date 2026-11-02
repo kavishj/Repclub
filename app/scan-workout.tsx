@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Camera, Clock3, Loader2, QrCode, RefreshCw, ScanLine, ShieldCheck } from "lucide-react";
+import { Camera, Check, Clock3, Loader2, QrCode, RefreshCw, ScanLine, ShieldCheck } from "lucide-react";
 import type { IScannerControls } from "@zxing/browser";
 import { countsForRewards, isScanTimed, MIN_SCAN_DURATION, MAX_SCAN_DURATION, type Session } from "../lib/league";
 const clock = (milliseconds: number) => {
@@ -22,6 +22,11 @@ export function ScanTimes({ session }: {
 }) {
     return isScanTimed(session) ? <div className="scan-times"><span>Scanned in<strong>{time(session.startedAt!)}</strong></span><span>Scanned out<strong>{time(session.endedAt!)}</strong></span></div> : null;
 }
+export function StatusTimeline({session}:{session:Session}) {
+    const qualified=countsForRewards(session),scannedIn=!!session.startedAt,scannedOut=isScanTimed(session),reviewed=!!session.reviewedAt;
+    const reason=qualified?"Qualified gym day. XP is capped at your weekly target.":session.timingSource!=="scan"?scannedIn?"Saved without checkout. This visit stays in your history and earns no rewards.":"Manual log. Both gym scans and staff review are needed for rewards.":session.status==="unqualified"?(session.duration<5?"Under 5 minutes. Both scans are saved, but this visit earns no rewards.":"Over 4 hours. Both scans are saved, but this visit earns no rewards."):session.status==="declined"?session.reviewNote||"Attendance was not confirmed. Contact your gym verifier.":session.status==="pending"?"Both scans saved. Awaiting an independent gym staff review.":session.status==="recording"?"Timer running. Scan the gym QR again when you finish.":"This visit does not meet the reward rules.";
+    return <section className="status-timeline" aria-label="Workout verification"><ol>{[{label:"Checked in",done:scannedIn},{label:"Checked out",done:scannedOut},{label:"Staff reviewed",done:reviewed},{label:"Reward qualified",done:qualified}].map((step,index)=><li key={step.label} className={step.done?"complete":""}><span>{step.done?<Check size={12}/>:index+1}</span>{step.label}</li>)}</ol><p>{reason}</p></section>;
+}
 export function WorkoutSession({ active, serverNow, receivedAt, busy, onScan, onManual, onDetails, onCancel }: {
     active: Session | null;
     serverNow: number;
@@ -39,7 +44,7 @@ export function WorkoutSession({ active, serverNow, receivedAt, busy, onScan, on
             return;
         }
         const base = serverNow - active.startedAt, received = receivedAt;
-        const update = () => setElapsed(Math.max(0, base + performance.now() - received));
+        const update = () => setElapsed(Math.max(0, base + Date.now() - received));
         update();
         const timer = setInterval(update, 1000);
         return () => clearInterval(timer);
@@ -48,10 +53,10 @@ export function WorkoutSession({ active, serverNow, receivedAt, busy, onScan, on
     return <section className={`card workout-session ${active ? "running" : ""}`} aria-label="Workout timer">
     <span className="session-symbol">{active ? <Clock3 size={22}/> : <ScanLine size={23}/>}</span>
     <div className="session-copy"><h2>{active ? active.title : "Scan in at the gym"}</h2>
-      <p>{active ? expired ? "Checkout expired. Save without checkout to keep your log." : "Scan out when you finish. Staff review unlocks rewards." : "Scan again at checkout to record your duration."}</p>
+      <p>{active ? expired ? "Scan out to end your timer. This visit will stay in history without rewards." : "Scan out when you finish. Staff review unlocks rewards." : "Scan again at checkout to record your duration."}</p>
       {active && <><output className="session-clock" role="timer" aria-label="Elapsed workout time">{clock(elapsed)}</output><small>{elapsed < MIN_SCAN_DURATION ? "Rewards require 5–240 minutes." : `Started ${time(active.startedAt!)}`}</small></>}
     </div>
-    <div className="session-actions"><button className="btn primary" disabled={busy || expired || (!!active && elapsed < MIN_SCAN_DURATION)} onClick={onScan}><ScanLine size={16}/>{active ? "Scan to finish" : "Scan to start"}</button>
+    <div className="session-actions"><button className="btn primary" disabled={busy} onClick={onScan}><ScanLine size={16}/>{active ? "Scan to finish" : "Scan to start"}</button>
       {active ? <><button className="btn secondary" disabled={busy} onClick={() => onDetails(active)}>Workout details</button><button className="text-button" disabled={busy} onClick={() => onCancel(active.id)}>Save without checkout</button></> : <button className="btn secondary" disabled={busy} onClick={onManual}>Manual log</button>}
     </div>
   </section>;

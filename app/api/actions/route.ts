@@ -16,9 +16,10 @@ const schemas = {
   createCampus: z.object({ action: z.literal("createCampus"), ...profile, campusName: name, gymName: name }),
   joinCampus: z.object({ action: z.literal("joinCampus"), ...profile, code: z.string().trim().min(6).max(12) }),
   plan: z.object({ action: z.literal("plan"), goal, days }),
-  workout: z.object({ action: z.literal("workout"), ...workoutDetails, date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), duration: z.number().int().min(1).max(240), code: z.string().trim().max(6).optional() }).strict(),
+  workout: z.object({ action: z.literal("workout"), ...workoutDetails, date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), duration: z.number().int().min(1).max(1440), requestId: z.string().uuid().optional(), code: z.string().trim().max(6).optional() }).strict(),
   scanStart: z.object({ action: z.literal("scanStart"), code: scanCode }).strict(),
   scanFinish: z.object({ action: z.literal("scanFinish"), id: z.string().min(1), code: scanCode }).strict(),
+  manualFinish: z.object({ action: z.literal("manualFinish"), id: z.string().min(1), ...workoutDetails, duration: z.number().int().min(1).max(1440) }).strict(),
   scanCancel: z.object({ action: z.literal("scanCancel"), id: z.string().min(1) }).strict(),
   workoutDetails: z.object({ action: z.literal("workoutDetails"), id: z.string().min(1), ...workoutDetails }).strict(),
   review: z.object({ action: z.literal("review"), id: z.string().min(1), decision: z.enum(["verified", "declined"]), confirmed: z.boolean(), note: z.string().trim().max(250) }),
@@ -61,17 +62,17 @@ export async function POST(request: Request) {
     if (!me) throw new HttpError("Create or join a campus first.", 403);
     const staff = () => { if (me.role === "member") throw new HttpError("Only gym staff can do that.", 403); };
     const checkScan = async (code: string) => {
-      const valid = await db.prepare("SELECT campus_id FROM desk_codes WHERE campus_id=? AND code=? AND expires_at>?").bind(me.campusId, code, now).first();
+      const valid = await db.prepare("SELECT campus_id FROM desk_codes WHERE campus_id=? AND ((code=? AND expires_at>?) OR (previous_code=? AND previous_expires_at>?))").bind(me.campusId, code, now, code, now).first();
       if (!valid) throw new HttpError("This gym QR has expired or belongs to another campus. Scan the current QR at your gym.");
     };
     const existingPlan = await db.prepare("SELECT id FROM plans WHERE user_id=? AND week=?").bind(me.userId, week).first();
     if (!existingPlan) await db.prepare("INSERT OR IGNORE INTO plans (id,user_id,week,goal,days) VALUES (?,?,?,?,?)").bind(id(), me.userId, week, me.goal, me.days).run();
     switch (data.action) {
       case "plan": {
-        const activity = await db.prepare("SELECT id FROM sessions WHERE user_id=? AND date>=? AND date<=? AND timing_source='scan' LIMIT 1").bind(me.userId, week, shiftDay(week, 6)).first();
+        const activity = await db.prepare("SELECT id FROM plans WHERE user_id=? AND week=? AND (locked_at IS NOT NULL OR EXISTS (SELECT 1 FROM sessions WHERE user_id=? AND date>=? AND date<=? AND started_at IS NOT NULL)) LIMIT 1").bind(me.userId, week, me.userId, week, shiftDay(week, 6)).first();
         if (activity && data.goal !== me.goal) throw new HttpError("Your target is locked after your first scan this week. You can still move your planned days.", 409);
         const results = await db.batch([
-          db.prepare("UPDATE members SET goal=?,days=? WHERE user_id=? AND (goal=? OR NOT EXISTS (SELECT 1 FROM sessions WHERE user_id=? AND date>=? AND date<=? AND timing_source='scan'))").bind(data.goal, JSON.stringify(data.days), me.userId, data.goal, me.userId, week, shiftDay(week, 6)),
+          db.prepare("UPDATE members SET goal=?,days=? WHERE user_id=? AND (goal=? OR NOT EXISTS (SELECT 1 FROM plans WHERE user_id=? AND week=? AND locked_at IS NOT NULL) AND NOT EXISTS (SELECT 1 FROM sessions WHERE user_id=? AND date>=? AND date<=? AND started_at IS NOT NULL))").bind(data.goal, JSON.stringify(data.days), me.userId, data.goal, me.userId, week, me.userId, week, shiftDay(week, 6)),
           db.prepare("UPDATE plans SET goal=(SELECT goal FROM members WHERE user_id=?),days=(SELECT days FROM members WHERE user_id=?) WHERE user_id=? AND week=?").bind(me.userId, me.userId, me.userId, week),
         ]);
         if (!results[0].meta.changes) throw new HttpError("Your target is locked after your first scan this week. You can still move your planned days.", 409);
@@ -80,18 +81,25 @@ export async function POST(request: Request) {
       case "workout": {
         const today = dayKey();
         if (data.date > today || data.date < shiftDay(today, -6) || Number.isNaN(Date.parse(data.date)) || new Date(data.date + "T12:00:00Z").toISOString().slice(0,10) !== data.date) throw new HttpError("Choose a real date within the last seven days.");
+        if (data.requestId) {
+          const previous = await db.prepare("SELECT user_id,campus_id,timing_source FROM sessions WHERE id=?").bind(data.requestId).first<{ user_id: string; campus_id: string; timing_source: string }>();
+          if (previous) {
+            if (previous.user_id !== me.userId || previous.campus_id !== me.campusId || previous.timing_source !== "manual") throw new HttpError("This save reference is unavailable.", 409);
+            break;
+          }
+        }
         await db.batch([
           db.prepare("INSERT OR IGNORE INTO plans (id,user_id,week,goal,days) VALUES (?,?,?,?,?)").bind(id(), me.userId, weekKey(data.date), me.goal, me.days),
-          db.prepare("INSERT INTO sessions (id,campus_id,user_id,title,type,date,duration,notes,exercises,status,desk_supported,timing_source,created_at) VALUES (?,?,?,?,?,?,?,?,?,'manual',0,'manual',?)").bind(id(), me.campusId, me.userId, data.title, data.type, data.date, data.duration, data.notes, JSON.stringify(data.exercises), now),
+          db.prepare("INSERT OR IGNORE INTO sessions (id,campus_id,user_id,title,type,date,duration,notes,exercises,status,desk_supported,timing_source,created_at) VALUES (?,?,?,?,?,?,?,?,?,'manual',0,'manual',?)").bind(data.requestId ?? id(), me.campusId, me.userId, data.title, data.type, data.date, data.duration, data.notes, JSON.stringify(data.exercises), now),
         ]); break;
       }
       case "scanStart": {
         await checkScan(data.code);
         const active = await db.prepare("SELECT id FROM sessions WHERE user_id=? AND status='recording'").bind(me.userId).first();
         if (active) throw new HttpError("A workout is already running. Scan out or save it without checkout first.", 409);
-        const duplicate = await db.prepare("SELECT id FROM sessions WHERE user_id=? AND date=? AND timing_source='scan' AND status!='declined'").bind(me.userId, dayKey(now)).first();
+        const duplicate = await db.prepare("SELECT id FROM sessions WHERE user_id=? AND date=? AND timing_source='scan' AND status IN ('recording','pending','verified')").bind(me.userId, dayKey(now)).first();
         if (duplicate) throw new HttpError("You already have a scan-timed workout for today. You can still add a manual log.", 409);
-        await db.prepare("INSERT INTO sessions (id,campus_id,user_id,title,type,date,duration,notes,exercises,status,desk_supported,timing_source,started_at,created_at) VALUES (?,?,?,'Gym workout','Strength',?,0,'','[]','recording',1,'scan',?,?)").bind(id(), me.campusId, me.userId, dayKey(now), now, now).run();
+        await db.batch([db.prepare("INSERT INTO sessions (id,campus_id,user_id,title,type,date,duration,notes,exercises,status,desk_supported,timing_source,started_at,created_at) VALUES (?,?,?,'Gym workout','Strength',?,0,'','[]','recording',1,'scan',?,?)").bind(id(), me.campusId, me.userId, dayKey(now), now, now), db.prepare("UPDATE plans SET locked_at=COALESCE(locked_at,?) WHERE user_id=? AND week=?").bind(now, me.userId, week)]);
         break;
       }
       case "scanFinish": {
@@ -100,9 +108,17 @@ export async function POST(request: Request) {
         if (session.status !== "recording" || !session.started_at) throw new HttpError("This workout is no longer running. Refresh your activity.", 409);
         await checkScan(data.code);
         const elapsed = now - session.started_at;
-        if (elapsed < MIN_SCAN_DURATION) throw new HttpError("Scan-timed rewards require at least 5 minutes. You can save a shorter workout without checkout.");
-        if (elapsed > MAX_SCAN_DURATION) throw new HttpError("The 4-hour checkout window has expired. Save this workout without checkout; it will not earn rewards.", 409);
-        const result = await db.prepare("UPDATE sessions SET ended_at=?,duration=?,status='pending' WHERE id=? AND user_id=? AND campus_id=? AND status='recording' AND ended_at IS NULL").bind(now, Math.floor(elapsed / 60_000), data.id, me.userId, me.campusId).run();
+        if (elapsed < 0) throw new HttpError("The workout clock is invalid. Refresh and try again.", 409);
+        const status = elapsed >= MIN_SCAN_DURATION && elapsed <= MAX_SCAN_DURATION ? "pending" : "unqualified";
+        const result = await db.prepare("UPDATE sessions SET ended_at=?,duration=?,status=? WHERE id=? AND user_id=? AND campus_id=? AND status='recording' AND ended_at IS NULL").bind(now, Math.floor(elapsed / 60_000), status, data.id, me.userId, me.campusId).run();
+        if (!result.meta.changes) throw new HttpError("This workout has already ended. Refresh your activity.", 409);
+        break;
+      }
+      case "manualFinish": {
+        const session = await db.prepare("SELECT status,timing_source,started_at,title,type,duration,notes,exercises FROM sessions WHERE id=? AND user_id=? AND campus_id=?").bind(data.id, me.userId, me.campusId).first<{status:string;timing_source:string;started_at:number|null;title:string;type:string;duration:number;notes:string;exercises:string}>();
+        if (!session) throw new HttpError("Workout not found.", 404);
+        if (session.status === "manual" && session.timing_source === "manual" && session.started_at && session.title===data.title && session.type===data.type && session.duration===data.duration && session.notes===data.notes && session.exercises===JSON.stringify(data.exercises)) break;
+        const result = await db.prepare("UPDATE sessions SET title=?,type=?,duration=?,notes=?,exercises=?,status='manual',timing_source='manual',ended_at=NULL WHERE id=? AND user_id=? AND campus_id=? AND status='recording'").bind(data.title, data.type, data.duration, data.notes, JSON.stringify(data.exercises), data.id, me.userId, me.campusId).run();
         if (!result.meta.changes) throw new HttpError("This workout has already ended. Refresh your activity.", 409);
         break;
       }
@@ -148,7 +164,7 @@ export async function POST(request: Request) {
       }
       case "desk": {
         staff(); const code = "repclub:gym:v1:" + Array.from(crypto.getRandomValues(new Uint8Array(32)), value => value.toString(16).padStart(2, "0")).join("");
-        await db.prepare("INSERT INTO desk_codes (campus_id,code,expires_at) VALUES (?,?,?) ON CONFLICT(campus_id) DO UPDATE SET code=excluded.code,expires_at=excluded.expires_at WHERE desk_codes.expires_at<=? OR desk_codes.code NOT LIKE 'repclub:gym:v1:%'").bind(me.campusId, code, now + 120_000, now + 15_000).run(); break;
+        await db.prepare("INSERT INTO desk_codes (campus_id,code,expires_at) VALUES (?,?,?) ON CONFLICT(campus_id) DO UPDATE SET previous_code=desk_codes.code,previous_expires_at=desk_codes.expires_at,code=excluded.code,expires_at=excluded.expires_at WHERE desk_codes.expires_at<=? OR desk_codes.code NOT LIKE 'repclub:gym:v1:%'").bind(me.campusId, code, now + 120_000, now + 15_000).run(); break;
       }
       case "role": {
         if (me.role !== "owner") throw new HttpError("Only the campus owner can appoint verifiers.", 403);
