@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-03T16:30:32Z",
+  "generatedAt": "2026-11-03T16:43:00Z",
   "title": "Design System: RepClub: Clubhouse",
   "extensions": {
     "colorMeta": {
@@ -690,6 +690,10 @@
       {
         "name": "small-header",
         "value": "360px"
+      },
+      {
+        "name": "wide-summary-row",
+        "value": "1100px"
       }
     ]
   },
@@ -756,7 +760,7 @@
       "refersTo": "navigation",
       "description": "Horizontal text destinations with a semibold accent selection and no filled highlight.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><button aria-current=\"page\">Your squad</button><button>Workouts</button><button>League</button></nav>",
-      "css": ".ds-nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-bottom:12px}.ds-nav button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 18px;border:0;border-radius:var(--control-radius,999px);background:transparent;color:var(--muted,#aab8ca);font:400 14px/1.5 system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .16s,color .16s}.ds-nav button:hover{background:transparent;color:var(--text,#e5e9ee)}.ds-nav button[aria-current=page]{background:transparent;color:var(--accent-text,#b9f25b);font-weight:600}.ds-nav button:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-nav button{transition:none}}"
+      "css": ".ds-nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-bottom:4px}.ds-nav button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px;border:0;border-radius:var(--control-radius,999px);background:transparent;color:var(--muted,#aab8ca);font:400 14px/1.5 system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .16s,color .16s}.ds-nav button:hover{background:transparent;color:var(--text,#e5e9ee)}.ds-nav button[aria-current=page]{background:transparent;color:var(--accent-text,#b9f25b);font-weight:600}.ds-nav button:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-nav button{transition:none}}"
     },
     {
       "name": "Attendance Status",
@@ -782,7 +786,8 @@
       "Squad activity and weekly commitment lead the home surface.",
       "Lime identifies primary actions in both light and dark themes.",
       "Open, borderless sections contain tasks; rows and separators organise repeated content.",
-      "Compact entry controls preserve a clear place to save details and finish a scan."
+      "Compact entry controls preserve a clear place to save details and finish a scan.",
+      "A compact 64px header, 12–16px section spacing and a narrower personal column keep the daily view dense."
     ],
     "rules": [
       {

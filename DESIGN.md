@@ -176,7 +176,7 @@ components:
     rounded: '{rounded.field}'
   navigation:
     rounded: '{rounded.pill}'
-    padding: 8px 18px
+    padding: 8px 12px
   status-label:
     typography: '{typography.label}'
     padding: 4px 0 4px 8px
@@ -252,20 +252,20 @@ The CSS sidebar and track aliases reuse panel and inset values. They are not sep
 
 ## Layout
 
-The Clubhouse shell uses a centred container (1160px maximum) with desktop side gutters (32px), a sticky header row (80px minimum) and horizontal navigation. A quiet wordmark, campus/profile access and appearance controls sit in that header. The home grid uses `minmax(0, 1.12fr)` for community activity and `minmax(360px, 1fr)` for the personal column, separated by (32px). Weekly commitment precedes activity; workout entry precedes squad progress and setup.
+The Clubhouse shell uses a centred container (1320px maximum) with desktop side gutters (24px), a sticky header row (64px minimum) and horizontal navigation. A quiet wordmark, campus/profile access and appearance controls sit in that header. The home grid gives activity the flexible column and uses `minmax(300px, 360px)` for the personal column, separated by (24px). Weekly commitment precedes activity; workout entry precedes squad progress and setup.
 
-The spacing base is (4px). Repeated within-group gaps use (8px) and (12px); section and panel spacing uses (24px), (28px) and (32px). Weekly commitment and workout entry have no enclosing fill, border, corner treatment or internal shell padding. Repeated activity and exercise content uses separators and rows rather than a grid of nested cards.
+The spacing base is (4px). Repeated within-group gaps use (8px) and (12px); section spacing uses (12px) and (16px), with (24px) reserved for the desktop column gap. The header navigation has (4px) bottom padding, main content starts (16px) below it, and page headings leave (16px) below. Weekly commitment and workout entry have no enclosing fill, border, corner treatment or internal shell padding. Repeated activity and exercise content uses separators and rows rather than a grid of nested cards.
 
 | Source breakpoint | Observed response |
 | --- | --- |
-| At most 1000px | Side gutters become 24px and the home-column gap becomes 24px. |
-| At most 800px | Home becomes one column with workout controls ahead of community content. An opened editor hides other personal-column blocks. Otherwise the personal area uses two columns. |
-| At most 760px | Horizontal navigation gives way to bottom navigation with a safe-area inset; the header row becomes at least 72px. Main content uses 20px gutters and leaves 104px at the bottom. The mobile Start/Finish shortcut is hidden while the inline editor is open. |
-| At most 520px | Main gutters become 16px and personal content stacks. Task sections stay unboxed without shell padding. Entry metadata and numeric controls reflow into two columns. |
+| At most 1000px | Side gutters become 20px; the personal column is 320px and the home-column gap becomes 20px. |
+| At most 800px | Home becomes one column with a 16px section gap and workout controls ahead of community content. An opened editor hides other personal-column blocks. Otherwise the personal area uses two columns. |
+| At most 760px | Horizontal navigation gives way to bottom navigation with a safe-area inset; the header row stays at least 64px. Main content uses 16px gutters and leaves `calc(80px + env(safe-area-inset-bottom))` at the bottom. Bottom-navigation targets are at least 56px high. The mobile Start/Finish shortcut is hidden while the inline editor is open. |
+| At most 520px | Main gutters become 12px and personal content stacks. Task sections stay unboxed without shell padding. Entry metadata and numeric controls reflow into two columns. |
 | At most 360px | Header-action spacing and the mobile scan shortcut compact further. |
 | Coarse pointer above 520px | Numeric inputs sit above their decrement/increment row; step targets retain at least 44px width. |
 
-The editor footer is sticky: (16px) above the desktop bottom, (88px) at the intermediate stacked layout, then `calc(72px + env(safe-area-inset-bottom))` on phones. These are source declarations, not browser-measured clearances. Sticky offsets, long content and keyboard interaction still need browser capture and interaction review.
+The editor footer is sticky: (16px) above the desktop and tablet bottom, then `calc(64px + env(safe-area-inset-bottom))` on phones. These are source declarations, not browser-measured clearances. Sticky offsets, long content and keyboard interaction still need browser capture and interaction review.
 
 ## Elevation & Depth
 
@@ -302,7 +302,7 @@ Attendance uses a quiet text-and-icon status label. In the Clubhouse feed it has
 
 ### Cards / Containers
 
-Weekly commitment, workout entry, summaries and legacy cards have transparent backgrounds, no enclosing borders, no corner treatment and no resting shadows. Home task sections have zero shell padding. Activity and exercises flow as separated rows. Home shows three compact workout summaries; notes and exercises remain available in Details and the separate all-activity screen. Squad standings use a collapsed disclosure.
+Weekly commitment, workout entry, summaries and legacy cards have transparent backgrounds, no enclosing borders, no corner treatment and no resting shadows. Home task sections have zero shell padding. Activity and exercises flow as separated rows. Home shows three compact workout summaries; at 1100px and above their identity and actions share one row, with title and metrics beneath. Notes and exercises remain available in Details and the separate all-activity screen. Squad standings use a collapsed disclosure.
 
 ### Inputs / Fields
 
