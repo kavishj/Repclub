@@ -50,18 +50,19 @@ export function Standings({ members, meId, compact = false, onSelect }: {
       {!compact && <ArrowUpRight size={15} className="row-arrow"/>}
     </button>)}</div>;
 }
-export function WorkoutCard({ session, member, viewerId, busy, onOpen, onCheer, onRepeat, onMember }: {
+export function WorkoutCard({ session, member, viewerId, busy, compact = false, onOpen, onCheer, onRepeat, onMember }: {
     session: Session;
     member?: RankedMember;
     viewerId: string;
     busy: boolean;
+    compact?: boolean;
     onOpen: (session: Session) => void;
     onCheer: (id: string) => void;
     onRepeat: (session: Session) => void;
     onMember: (member: RankedMember) => void;
 }) {
     const exercises = exerciseList(session), volume = loggedVolume(session), isOwn = session.userId === viewerId;
-    return <article className="workout-card">
+    return <article className={`workout-card${compact ? " compact-workout" : ""}`}>
     <div className="workout-top">
       <button className="athlete-button" onClick={() => member && onMember(member)} aria-label={`View ${isOwn ? "your" : member?.name || "member"} progress`}>
         <Avatar name={member?.name || "Member"} index={member?.name.charCodeAt(0) || 0}/>
@@ -70,13 +71,13 @@ export function WorkoutCard({ session, member, viewerId, busy, onOpen, onCheer, 
       <Pill status={session.status}/>
     </div>
     <button className="workout-title" onClick={() => onOpen(session)}>{session.title}<ArrowUpRight size={17}/></button>
-    {session.notes && <p className="workout-note">{session.notes}</p>}
+    {!compact && session.notes && <p className="workout-note">{session.notes}</p>}
     <div className="workout-facts"><span aria-label={session.timingSource==="scan"?"Scan duration":"Manual duration"}>{session.duration} min</span><span>{exercises.length?`${exercises.length} exercises`:session.type}</span>{volume>0&&<span>{volume.toLocaleString("en-IN")} kg volume</span>}</div>
-    {exercises.length > 0 && <details className="exercise-preview">
+    {!compact && exercises.length > 0 && <details className="exercise-preview">
       <summary><span className="exercise-preview-icons"><Dumbbell size={15}/></span><span>{exercises.slice(0, 2).map(e => e.name).join(" · ")}{exercises.length > 2 ? ` +${exercises.length - 2}` : ""}</span><ChevronDown size={15}/></summary>
       <div className="exercise-preview-list">{exercises.map((exercise, index) => <div key={index}><span>{exercise.name}</span><strong>{exercise.sets} × {exercise.reps}<small>{exercise.weight} kg</small></strong></div>)}</div>
     </details>}
-    {session.status === "declined" && <p className="review-note">Staff note: {session.reviewNote}</p>}
+    {!compact && session.status === "declined" && <p className="review-note">Staff note: {session.reviewNote}</p>}
     <div className="workout-bottom">
       <m.button whileTap={{ scale: .96 }} className={`cheer ${session.cheered ? "cheered" : ""}`} disabled={busy} onClick={() => onCheer(session.id)} aria-pressed={!!session.cheered} aria-label={`${session.cheered ? "Unlike" : "Like"} ${session.title}`}><m.span className="cheer-heart" initial={false} animate={{ scale: session.cheered ? [1, 1.15, 1] : 1 }} transition={{ duration: .3 }}><Heart size={17} fill={session.cheered ? "currentColor" : "none"}/></m.span><span>{session.cheers || 0}</span><span className="cheer-label">{session.cheered ? "Liked" : "Like"}</span></m.button>
       <div className="workout-actions">{isOwn && <button className="subtle-button" onClick={() => onRepeat(session)}><RotateCcw size={14}/> Repeat</button>}<button className="subtle-button" onClick={() => onOpen(session)}>Details <ArrowRight size={14}/></button></div>

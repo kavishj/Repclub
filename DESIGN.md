@@ -1,6 +1,6 @@
 ---
 name: 'RepClub: Clubhouse'
-description: A squad-first college gym clubhouse with soft tonal surfaces and lime actions.
+description: A compact college gym clubhouse with open sections and lime actions.
 colors:
   accent: '#b9f25b'
   accent-text-light: '#426500'
@@ -131,10 +131,10 @@ components:
     rounded: '{rounded.field}'
     padding: 10px 12px
   panel-dark:
-    backgroundColor: '{colors.panel-dark}'
+    backgroundColor: transparent
     textColor: '{colors.text-dark}'
-    rounded: '{rounded.panel}'
-    padding: 24px
+    rounded: 0px
+    padding: 0px
   button-primary-light:
     backgroundColor: '{colors.accent}'
     textColor: '{colors.accent-ink-light}'
@@ -154,10 +154,10 @@ components:
     rounded: '{rounded.field}'
     padding: 10px 12px
   panel-light:
-    backgroundColor: '{colors.panel-light}'
+    backgroundColor: transparent
     textColor: '{colors.text-light}'
-    rounded: '{rounded.panel}'
-    padding: 24px
+    rounded: 0px
+    padding: 0px
   button-text:
     textColor: '{colors.accent}'
     padding: '0'
@@ -190,13 +190,13 @@ components:
 
 Clubhouse is the user-selected direction for RepClub, recorded on 3 November 2026 after comparing Training log, Clubhouse and Focus. OpenDesigner supplied the starting system and option gallery; Clubhouse maps to its tonal direction. Impeccable's Operate, craft-floor, clarify and polish guidance refines the implementation. The approved Clubhouse variant in `../repclub-mockups.html` is the concept reference; `app/globals.css` and the shipped components are the implementation source of truth.
 
-Quiet typography, soft neutral surfaces and lime actions support a private squad of college gym members in India. Home places friends' workouts and the weekly commitment together, with workout entry beside them on desktop. League, achievements and the staff desk retain their existing functions. The visual language stays compact and friendly through rows, separators and rounded controls, while attendance and reward status remain explicit.
+Quiet typography, open neutral space and lime actions support a private squad of college gym members in India. Home places three recent workout summaries and the weekly commitment together, with workout entry beside them on desktop. All activity opens on a separate screen. Squad standings are collapsed until requested, and workout controls come first on smaller screens. League, achievements and the staff desk retain their existing functions. The visual language stays compact and friendly through rows, separators and rounded controls, while attendance and reward status remain explicit.
 
 **Key Characteristics:**
 
 - Squad activity and weekly commitment lead the home surface.
 - Lime identifies primary actions in both light and dark themes.
-- Soft panels contain tasks; rows and separators organise repeated content.
+- Open, borderless sections contain tasks; rows and separators organise repeated content.
 - Compact entry controls preserve a clear place to save details and finish a scan.
 
 ## Colors
@@ -208,7 +208,7 @@ A single lime action accent sits on cool, softly layered neutrals; attendance an
 - **Club Lime** (`accent`): the shared primary-action fill and dark-theme accent text.
 - **Lime Ink** (`accent-ink-dark`, `accent-ink-light`): readable primary-button labels matched to the active theme.
 - **Deep Lime** (`accent-text-light`): links, selection marks, caret and focus outlines on light surfaces.
-- **Lime Wash** (`accent-soft-dark`, `accent-soft-light`): selected goals, personal-progress emphasis and pressed numeric controls.
+- **Lime Wash** (`accent-soft-dark`, `accent-soft-light`): brief pressed feedback on numeric controls. Decorative highlight boxes and selected-state fills are removed.
 
 ### Secondary
 
@@ -220,7 +220,7 @@ A single lime action accent sits on cool, softly layered neutrals; attendance an
 ### Neutral
 
 - **Club Slate / Cool Page** (`bg-dark`, `bg-light`): the page and sticky header.
-- **Raised Slate / Chalk Surface** (`panel-dark`, `panel-light`): the weekly commitment, workout entry, selected navigation and dialogs.
+- **Raised Slate / Chalk Surface** (`panel-dark`, `panel-light`): functional controls, dialogs and popups. Weekly commitment, workout entry and navigation remain unfilled.
 - **Inset Slate / Blue Mist** (`panel-alt-dark`, `panel-alt-light`): fields, numbers, avatars and quiet inset areas.
 - **Primary Ink** (`text-*`) and **Secondary Ink** (`muted-*`): the text hierarchy.
 - **Soft Separator** (`line-*`): list dividers and static boundaries. **Control Edge** (`control-line-*`) gives interactive fields and secondary buttons a stronger boundary.
@@ -254,14 +254,14 @@ The CSS sidebar and track aliases reuse panel and inset values. They are not sep
 
 The Clubhouse shell uses a centred container (1160px maximum) with desktop side gutters (32px), a sticky header row (80px minimum) and horizontal navigation. A quiet wordmark, campus/profile access and appearance controls sit in that header. The home grid uses `minmax(0, 1.12fr)` for community activity and `minmax(360px, 1fr)` for the personal column, separated by (32px). Weekly commitment precedes activity; workout entry precedes squad progress and setup.
 
-The spacing base is (4px). Repeated within-group gaps use (8px) and (12px); section and panel spacing uses (24px), (28px) and (32px). The weekly and workout panels use (24px) internal padding on wide screens. Repeated activity and exercise content uses separators and rows rather than a grid of nested cards.
+The spacing base is (4px). Repeated within-group gaps use (8px) and (12px); section and panel spacing uses (24px), (28px) and (32px). Weekly commitment and workout entry have no enclosing fill, border, corner treatment or internal shell padding. Repeated activity and exercise content uses separators and rows rather than a grid of nested cards.
 
 | Source breakpoint | Observed response |
 | --- | --- |
-| At most 1000px | Side gutters become 24px; the home-column gap becomes 24px and panel padding becomes 20px. |
-| At most 800px | Home becomes one column. An opened editor moves ahead of community content and hides other personal-column blocks. Otherwise the personal area uses two columns. |
+| At most 1000px | Side gutters become 24px and the home-column gap becomes 24px. |
+| At most 800px | Home becomes one column with workout controls ahead of community content. An opened editor hides other personal-column blocks. Otherwise the personal area uses two columns. |
 | At most 760px | Horizontal navigation gives way to bottom navigation with a safe-area inset; the header row becomes at least 72px. Main content uses 20px gutters and leaves 104px at the bottom. The mobile Start/Finish shortcut is hidden while the inline editor is open. |
-| At most 520px | Main gutters become 16px; personal content stacks; task panels use 20px by 16px padding and 24px corners. Entry metadata and numeric controls reflow into two columns. |
+| At most 520px | Main gutters become 16px and personal content stacks. Task sections stay unboxed without shell padding. Entry metadata and numeric controls reflow into two columns. |
 | At most 360px | Header-action spacing and the mobile scan shortcut compact further. |
 | Coarse pointer above 520px | Numeric inputs sit above their decrement/increment row; step targets retain at least 44px width. |
 
@@ -269,21 +269,20 @@ The editor footer is sticky: (16px) above the desktop bottom, (88px) at the inte
 
 ## Elevation & Depth
 
-Depth comes mainly from tonal layering, whitespace and separators. The shared card shadow is `none`; feed rows explicitly remove the legacy card shell. Primary-button hover mixes lime with the panel instead of adding glow. Floating elements retain purpose-specific soft shadows.
+Hierarchy comes from typography, whitespace and separators. Decorative filled or outlined highlight boxes are removed across summaries, notices and selected navigation. The shared card shadow is `none`; feed rows explicitly remove the legacy card shell. Primary-button hover mixes lime with the panel instead of adding glow. Floating elements retain purpose-specific soft shadows.
 
 ### Shadow Vocabulary
 
 - **Popup:** `0 8px 24px #00000024` for the exercise and activity menus.
-- **Running session:** `0 8px 24px #00000014` for the sticky active-session surface outside home.
 - **Dialog:** `0 30px 100px #00000050`, with backdrop `#080b12a8` and backdrop blur (5px).
 
-**The Flat Task Rule.** Keep home panels and feed rows flat at rest. Reserve shadows for floating popups, dialogs and the sticky running-session surface.
+**The Flat Task Rule.** Keep task sections, summaries, notices and feed rows transparent and borderless. Reserve enclosing surfaces and shadows for functional popups and dialogs. Retain editable fields, action buttons, QR contrast and keyboard focus.
 
 Motion is brief and tied to state: shared colour transitions (160ms), popup fade/translation (160ms ease-out), exercise insertion/removal (160ms), derived NumberFlow totals (180ms) and the application MotionConfig default (200ms). Existing goal/cheer feedback and a completed-goal celebration remain in the build. CSS disables animation and transitions for reduced motion; MotionConfig respects the user preference and celebration checks it explicitly. These are implementation facts, with interaction verification still outstanding.
 
 ## Shapes
 
-The repeated task silhouette is soft and rounded: shared surfaces use `surface`, prominent home panels and dialogs use `panel`, fields use `field`, popups use `popup`, and their options use `option`. Single-line actions and navigation use the `pill` radius. Avatars, weekly day markers and icon controls use circular silhouettes. Feed rows and exercise rows stay unboxed, with thin separators. The workout-name field is the deliberate underline-only exception to inset field styling.
+Task sections are open and square edged without enclosing surfaces. Dialogs use `panel`, fields use `field`, popups use `popup`, and their options use `option`. Single-line actions use the `pill` radius; navigation selection uses accent text and weight without a filled pill. Avatars, weekly day markers and icon controls use circular silhouettes. Feed rows and exercise rows stay unboxed, with thin separators. The workout-name field is the deliberate underline-only exception to inset field styling.
 
 The inherited league, achievement and staff surfaces still contain smaller corner treatments. This pass records the Clubhouse home and entry vocabulary without silently converting every legacy detail into a new shared token.
 
@@ -299,11 +298,11 @@ Use one primary action per task group. Saving workout details remains a separate
 
 ### Chips
 
-Attendance uses a quiet text-and-icon status label. In the Clubhouse feed it has a transparent background, zero corner radius and left inset (8px); verified, pending and declined use their semantic foregrounds. Manual and history-only labels use Secondary Ink. The underlying generic status treatment still uses soft semantic fills outside this feed context. Keep status meaning in the words as well as colour.
+Attendance uses a quiet text-and-icon status label. In the Clubhouse feed it has a transparent background, zero corner radius and left inset (8px); verified, pending and declined use their semantic foregrounds. Manual and history-only labels use Secondary Ink. Generic status treatments also remain transparent outside the feed. Keep status meaning in the words as well as colour.
 
 ### Cards / Containers
 
-Weekly commitment and workout entry use the surface tone, prominent panel corners and desktop padding (24px), with responsive changes described in Layout. They have no resting shadow. Activity and exercise content flows as separated rows. The shared legacy card uses the smaller surface radius with a transparent border after the Clubhouse override.
+Weekly commitment, workout entry, summaries and legacy cards have transparent backgrounds, no enclosing borders, no corner treatment and no resting shadows. Home task sections have zero shell padding. Activity and exercises flow as separated rows. Home shows three compact workout summaries; notes and exercises remain available in Details and the separate all-activity screen. Squad standings use a collapsed disclosure.
 
 ### Inputs / Fields
 
@@ -313,11 +312,11 @@ Base UI owns autocomplete, selects and numeric entry. Exercise names allow free 
 
 ### Navigation
 
-Desktop navigation is a horizontal set of pill controls with Secondary Ink at rest, Hover Surface on hover and the surface tone plus semibold Primary Ink when selected. The selected item exposes `aria-current="page"`. Phone bottom navigation uses the surface tone, a top separator, safe-area padding and accent text for the active destination. Icons, where present, are inline SVG controls with accessible labels; decorative heading icons are outside the chosen home and entry direction.
+Desktop navigation is a horizontal set of text controls with Secondary Ink at rest, Primary Ink on hover and semibold accent text when selected. There is no filled selected-state box. The selected item exposes `aria-current="page"`. Phone bottom navigation uses the surface tone, a top separator, safe-area padding and accent text for the active destination. Icons, where present, are inline SVG controls with accessible labels; decorative heading icons are outside the chosen home and entry direction.
 
 ### Weekly commitment and status timeline
 
-The week is a seven-column strip of circular day markers. Completed, pending, today and planned states use semantic fills, a control outline or a dashed border as appropriate. Goal and day controls keep their existing selection behaviour. The detail timeline separates scan-in, scan-out, review and reward outcome; it changes from four columns to two at the narrow breakpoint. Empty, loading, error, pending, declined, manual and out-of-range states must use real product data and clear recovery actions. Product eligibility remains defined in `PRODUCT.md`; styling must not imply rewards before qualification.
+The week is a seven-column strip of circular day markers. Completed and pending days use semantic text and icons; today and planned days retain their circular outline or dashed marker. Goal and day controls keep their selection behaviour with accent text, weight and an underline instead of filled highlight boxes. The detail timeline separates scan-in, scan-out, review and reward outcome; it changes from four columns to two at the narrow breakpoint. Empty, loading, error, pending, declined, manual and out-of-range states must use real product data and clear recovery actions. Product eligibility remains defined in `PRODUCT.md`; styling must not imply rewards before qualification.
 
 ### Verification limits and uncanonized drift
 
@@ -337,6 +336,7 @@ The compact uppercase onboarding step label is a pre-existing eyebrow treatment 
 
 ### Don't:
 
+- **Don't** reintroduce filled or outlined highlight boxes for task sections, summaries, notices, icon tiles or selected tabs.
 - **Don't** introduce nested cards, metric-tile dashboards, decorative heading icons, eyebrows, progress rings or repeated reward explanations into the approved home and entry surfaces.
 - **Don't** replace an exercise name or previous values while the person is typing; reusing previous values requires an explicit tap.
 - **Don't** imply that manual history, missing checkout, out-of-range duration or pending review has already earned rewards.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-02T23:56:54Z",
+  "generatedAt": "2026-11-03T16:30:32Z",
   "title": "Design System: RepClub: Clubhouse",
   "extensions": {
     "colorMeta": {
@@ -643,11 +643,6 @@
         "purpose": "Activity and exercise menus."
       },
       {
-        "name": "running-session",
-        "value": "0 8px 24px #00000014",
-        "purpose": "Sticky active-session surface outside home."
-      },
-      {
         "name": "dialog",
         "value": "0 30px 100px #00000050",
         "purpose": "Modal dialog over the dimmed and blurred backdrop."
@@ -759,9 +754,9 @@
       "name": "Desktop Navigation",
       "kind": "nav",
       "refersTo": "navigation",
-      "description": "Horizontal pill destinations with a tonal selected state.",
+      "description": "Horizontal text destinations with a semibold accent selection and no filled highlight.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><button aria-current=\"page\">Your squad</button><button>Workouts</button><button>League</button></nav>",
-      "css": ".ds-nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-bottom:12px}.ds-nav button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 18px;border:0;border-radius:var(--control-radius,999px);background:transparent;color:var(--muted,#aab8ca);font:400 14px/1.5 system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .16s,color .16s}.ds-nav button:hover{background:var(--hover,#2a323e);color:var(--text,#e5e9ee)}.ds-nav button[aria-current=page]{background:var(--panel,#20252d);color:var(--text,#e5e9ee);font-weight:600}.ds-nav button:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-nav button{transition:none}}"
+      "css": ".ds-nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-bottom:12px}.ds-nav button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 18px;border:0;border-radius:var(--control-radius,999px);background:transparent;color:var(--muted,#aab8ca);font:400 14px/1.5 system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .16s,color .16s}.ds-nav button:hover{background:transparent;color:var(--text,#e5e9ee)}.ds-nav button[aria-current=page]{background:transparent;color:var(--accent-text,#b9f25b);font-weight:600}.ds-nav button:focus-visible{outline:2px solid var(--accent-text,#b9f25b);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-nav button{transition:none}}"
     },
     {
       "name": "Attendance Status",
@@ -772,21 +767,21 @@
       "css": ".ds-status{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:4px 0 4px 8px;border-radius:0;background:transparent;color:var(--positive,#75d294);font:500 12px/1.5 system-ui,sans-serif;white-space:nowrap}.ds-status svg{width:13px;height:13px;flex-shrink:0}"
     },
     {
-      "name": "Task Panel",
+      "name": "Task Section",
       "kind": "card",
       "refersTo": "panel-dark",
-      "description": "The quiet rounded container used for weekly commitment and workout entry.",
+      "description": "An open, borderless section used for weekly commitment and workout entry.",
       "html": "<section class=\"ds-panel\"><h2>Your workout</h2><p>Scan in at the gym, then scan out when you finish.</p></section>",
-      "css": ".ds-panel{min-width:0;padding:24px;border-radius:28px;background:var(--panel,#20252d);color:var(--text,#e5e9ee);box-shadow:none;font:400 14px/1.5 system-ui,sans-serif}.ds-panel h2{margin:0;font-size:20px;font-weight:650;line-height:1.35;letter-spacing:-.02em}.ds-panel p{margin:8px 0 0;color:var(--muted,#aab8ca);font-size:14px;line-height:1.6;max-width:48ch}@media(max-width:1000px){.ds-panel{padding:20px}}@media(max-width:520px){.ds-panel{padding:20px 16px;border-radius:24px}}"
+      "css": ".ds-panel{min-width:0;padding:0;border-radius:0;background:transparent;color:var(--text,#e5e9ee);box-shadow:none;font:400 14px/1.5 system-ui,sans-serif}.ds-panel h2{margin:0;font-size:20px;font-weight:650;line-height:1.35;letter-spacing:-.02em}.ds-panel p{margin:8px 0 0;color:var(--muted,#aab8ca);font-size:14px;line-height:1.6;max-width:48ch}"
     }
   ],
   "narrative": {
     "northStar": "Clubhouse",
-    "overview": "Clubhouse is the user-selected direction for RepClub, recorded on 3 November 2026 after comparing Training log, Clubhouse and Focus. OpenDesigner supplied the starting system and option gallery; Clubhouse maps to its tonal direction. Impeccable's Operate, craft-floor, clarify and polish guidance refines the implementation. The approved Clubhouse variant in `../repclub-mockups.html` is the concept reference; `app/globals.css` and the shipped components are the implementation source of truth.\n\nQuiet typography, soft neutral surfaces and lime actions support a private squad of college gym members in India. Home places friends' workouts and the weekly commitment together, with workout entry beside them on desktop. League, achievements and the staff desk retain their existing functions. The visual language stays compact and friendly through rows, separators and rounded controls, while attendance and reward status remain explicit.",
+    "overview": "Clubhouse is the user-selected direction for RepClub, recorded on 3 November 2026 after comparing Training log, Clubhouse and Focus. OpenDesigner supplied the starting system and option gallery; Clubhouse maps to its tonal direction. Impeccable's Operate, craft-floor, clarify and polish guidance refines the implementation. The approved Clubhouse variant in `../repclub-mockups.html` is the concept reference; `app/globals.css` and the shipped components are the implementation source of truth.\n\nQuiet typography, open neutral space and lime actions support a private squad of college gym members in India. Home places three recent workout summaries and the weekly commitment together, with workout entry beside them on desktop. All activity opens on a separate screen. Squad standings are collapsed until requested, and workout controls come first on smaller screens. League, achievements and the staff desk retain their existing functions. The visual language stays compact and friendly through rows, separators and rounded controls, while attendance and reward status remain explicit.",
     "keyCharacteristics": [
       "Squad activity and weekly commitment lead the home surface.",
       "Lime identifies primary actions in both light and dark themes.",
-      "Soft panels contain tasks; rows and separators organise repeated content.",
+      "Open, borderless sections contain tasks; rows and separators organise repeated content.",
       "Compact entry controls preserve a clear place to save details and finish a scan."
     ],
     "rules": [
@@ -807,7 +802,7 @@
       },
       {
         "name": "The Flat Task Rule",
-        "body": "Keep home panels and feed rows flat at rest. Reserve shadows for floating popups, dialogs and the sticky running-session surface.",
+        "body": "Keep task sections, summaries, notices and feed rows transparent and borderless. Reserve enclosing surfaces and shadows for functional popups and dialogs. Retain editable fields, action buttons, QR contrast and keyboard focus.",
         "section": "elevation"
       }
     ],
@@ -819,6 +814,7 @@
       "Do keep phone fields at least 16px, retain useful coarse-pointer touch areas, and respect reduced-motion preferences."
     ],
     "donts": [
+      "Don't reintroduce filled or outlined highlight boxes for task sections, summaries, notices, icon tiles or selected tabs.",
       "Don't introduce nested cards, metric-tile dashboards, decorative heading icons, eyebrows, progress rings or repeated reward explanations into the approved home and entry surfaces.",
       "Don't replace an exercise name or previous values while the person is typing; reusing previous values requires an explicit tap.",
       "Don't imply that manual history, missing checkout, out-of-range duration or pending review has already earned rewards.",
