@@ -263,7 +263,7 @@ The spacing base is (4px). Repeated within-group gaps use (8px) and (12px); sect
 | At most 760px | Horizontal navigation gives way to bottom navigation with a safe-area inset; the header row stays at least 64px. Main content uses 16px gutters and leaves `calc(94px + env(safe-area-inset-bottom))` at the bottom for the floating navigation. Bottom-navigation targets are at least 44px high. The mobile Start/Finish shortcut is hidden while the inline editor is open. |
 | At most 520px | Main gutters become 12px and personal content stacks. Task sections stay unboxed without shell padding. Entry metadata and numeric controls reflow into two columns. |
 | At most 360px | Header-action spacing and the mobile scan shortcut compact further. |
-| Coarse pointer above 520px | Numeric inputs sit above their decrement/increment row; step targets retain at least 44px width. |
+| Entry container at or below 440px | Activity and duration share a row; date spans the next. Sets and reps share a row, with weight full-width beneath. All numeric controls keep inline 44px decrement/increment targets. |
 
 The editor footer is sticky: (16px) above the desktop and tablet bottom, then `calc(78px + env(safe-area-inset-bottom))` on phones. These are source declarations, not browser-measured clearances. Sticky offsets, long content and keyboard interaction still need browser capture and interaction review.
 
@@ -282,7 +282,7 @@ Motion is brief and tied to state: shared colour transitions (160ms), popup fade
 
 ## Shapes
 
-Task sections are open and square edged without enclosing surfaces. Dialogs use `panel`, fields use `field`, popups use `popup`, and their options use `option`. Single-line actions use the `pill` radius; navigation selection uses accent text and weight without a filled pill. Avatars, weekly day markers and icon controls use circular silhouettes. Feed rows and exercise rows stay unboxed, with thin separators. The workout-name field is the deliberate underline-only exception to inset field styling.
+Task sections are open and square edged without enclosing surfaces. Dialogs use `panel`, fields use `field`, popups use `popup`, and their options use `option`. Single-line actions use the `pill` radius; navigation selection uses accent text and weight without a filled pill. Avatars, weekly day markers and icon controls use circular silhouettes. Feed rows and exercise rows stay unboxed, with thin separators. The workout name follows the same rounded, inset-label field as onboarding, squad setup and review forms.
 
 The inherited league, achievement and staff surfaces still contain smaller corner treatments. This pass records the Clubhouse home and entry vocabulary without silently converting every legacy detail into a new shared token.
 
@@ -306,9 +306,9 @@ Weekly commitment, workout entry, summaries and legacy cards have transparent ba
 
 ### Inputs / Fields
 
-Fields feel inset and compact. Modal and date inputs use Inset Slate / Blue Mist, a Control Edge border, field corners and minimum height (44px). The workout name uses an underline and larger editable text. Search uses a surface background, icon and pill outline; activity selection uses the inset tone and a pill silhouette.
+Shared TextField and NoteField components keep labels inside the field above the editable value, with optional leading icons. The entire rounded label focuses its input. Single-line surfaces are at least 60px tall with 16px values, 12px persistent labels and 10px gaps in onboarding. Field surfaces use #242b32 in dark mode and white with a restrained shadow in light mode. Focus adds a lime boundary and soft ring; invalid fields retain native validation and gain a red boundary. Search, activity selection and number groups use the same field surface with a pill silhouette. Onboarding uses a compact progress rail and reduced header, heading and action spacing.
 
-Base UI owns autocomplete, selects and numeric entry. Exercise names allow free text. Previous values require an explicit tap and typing never gets overwritten. Only one exercise row expands at a time. Numeric groups use field corners, a centred tabular value and decrement/increment controls; coarse pointers receive the reflow documented in Layout. Focus-within uses a (2px) accent-text outline with (2px) offset. A fieldset disables editing during a request; inline errors use Attention Red and a clear message.
+Base UI owns autocomplete, selects and numeric entry. Exercise names allow free text. Previous values require an explicit tap and typing never gets overwritten. Only one exercise row expands at a time. Numeric groups use a pill silhouette, a centred tabular value and 44px inline decrement/increment controls. Container queries apply the compact layout to both phones and narrow desktop columns. Exercise rows have small numeric indices, and derived totals use lime, blue and purple accents. Focus-within uses a (2px) accent-text outline with (2px) offset. A fieldset disables editing during a request; inline errors use Attention Red and a clear message.
 
 ### Navigation
 
@@ -341,3 +341,5 @@ The compact uppercase onboarding step label is a pre-existing eyebrow treatment 
 - **Don't** replace an exercise name or previous values while the person is typing; reusing previous values requires an explicit tap.
 - **Don't** imply that manual history, missing checkout, out-of-range duration or pending review has already earned rewards.
 - **Don't** describe source checks or the offline detector as browser approval, responsive measurement or phone-camera verification.
+
+Form interaction updates (4 November 2026): focus icons shift by 1px, buttons compress gently on press, dropdown chevrons rotate and the setup progress segments update with the current step. Reduced-motion preferences disable these effects. User reference images inform the rounded controls and compact tracking rhythm; they do not introduce meal tracking or alter workout verification.

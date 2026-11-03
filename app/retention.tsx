@@ -4,6 +4,7 @@ import {ArrowRight,CalendarDays,ChevronDown,Play,Trash2} from "lucide-react";
 import type {AppState} from "../lib/league";
 import {starterRoutines,type Routine} from "../lib/routines";
 import {weeklyRecap,workoutCalendar,type PilotStats} from "../lib/insights";
+import {TextField} from "./form-fields";
 import {CompactSelect} from "./entry-controls";
 
 export function RoutineLibrary({routines,busy,onUse,onDelete}:{routines:Routine[];busy:boolean;onUse:(routine:Routine)=>void;onDelete:(id:string)=>Promise<boolean>}){
@@ -22,7 +23,7 @@ export function CalendarPlan({days,gymName,userId,busy=false,onSavePlan}:{days:n
   catch(e){setMessage(e instanceof Error?e.message:"Could not prepare your reminders.");}
  }
  return <section className="calendar-plan" aria-labelledby={`calendar-plan-${userId}`}><h3 id={`calendar-plan-${userId}`}><CalendarDays size={16}/> Gym reminders</h3><p className="section-caption">Your calendar reminds you before gym time and to scan out at the planned end. Reimport after changing your plan; remove the old calendar event to avoid duplicates.</p>
-  <div className="reminder-fields"><label>Gym time<input type="time" value={time} onChange={e=>setTime(e.target.value)} aria-label="Planned gym time in India"/></label><label>Session length<CompactSelect label="Planned workout length" value={duration} onChange={setDuration} items={[30,45,60,90,120].map(v=>({value:String(v),label:`${v} min`}))}/></label><label>Remind me<CompactSelect label="Gym reminder lead time" value={reminder} onChange={setReminder} items={[10,30,60].map(v=>({value:String(v),label:`${v} min before`}))}/></label></div>
+  <div className="reminder-fields"><TextField label="Gym time" type="time" value={time} onChange={e=>setTime(e.target.value)} aria-label="Planned gym time in India"/><label>Session length<CompactSelect label="Planned workout length" value={duration} onChange={setDuration} items={[30,45,60,90,120].map(v=>({value:String(v),label:`${v} min`}))}/></label><label>Remind me<CompactSelect label="Gym reminder lead time" value={reminder} onChange={setReminder} items={[10,30,60].map(v=>({value:String(v),label:`${v} min before`}))}/></label></div>
   <button type="button" className="btn secondary" disabled={busy||!days.length||!time} onClick={()=>void download()}>Add plan to calendar<ArrowRight size={15}/></button>{!days.length&&<p className="fine-print">Choose planned days above to enable reminders.</p>}<p className="fine-print">Times use India time. Calendar reminders do not start or end a workout.</p>{message&&<p className="fine-print" role="status">{message}</p>}
  </section>;
 }
