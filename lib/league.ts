@@ -1,6 +1,8 @@
+import type { Routine } from "./routines";
+import type { PilotStats } from "./insights";
 export const TIMEZONE = "Asia/Kolkata";
 export type Member = { userId: string; campusId: string; name: string; role: string; goal: number; days: string; squadId: string | null; joinedAt: number };
-export type Session = { id: string; campusId: string; userId: string; title: string; type: string; date: string; duration: number; notes: string; exercises: string; status: string; deskSupported: number; timingSource: string; startedAt: number | null; endedAt: number | null; createdAt: number; reviewedBy: string | null; reviewedAt: number | null; reviewNote: string | null; cheers?: number; cheered?: boolean };
+export type Session = { id: string; campusId: string; userId: string; title: string; type: string; date: string; duration: number; notes: string; exercises: string; status: string; deskSupported: number; timingSource: string; startedAt: number | null; endedAt: number | null; createdAt: number; reviewedBy: string | null; reviewedAt: number | null; reviewNote: string | null; appealNote?:string|null; appealedAt?:number|null; cheers?: number; cheered?: boolean };
 export type Plan = { id: string; userId: string; week: string; goal: number; days: string; lockedAt?: number | null };
 export type Stats = { count: number; goal: number; percent: number; points: number; xp: number; total: number; goalWeeks: number; comeback: boolean };
 export type RankedMember = Member & { stats: Stats; rank: number };
@@ -8,7 +10,7 @@ export type Campus = { id: string; name: string; gymName: string; inviteCode?: s
 export type Squad = { id: string; campusId: string; name: string; inviteCode?: string; createdAt: number };
 export type PageInfo = { nextCursor: string | null; total: number };
 export type ActivitySummary = { pending: number; goalLocked: boolean; hasScanWorkout: boolean; history: {week:string;percent:number}[]; attendance: {date:string;status:string}[] };
-export type AppState = { user: { userId: string; name: string } | null; campus: Campus | null; me: RankedMember | null; members: RankedMember[]; squads: Squad[]; feed: Session[]; mine: Session[]; activeSession: Session | null; serverNow: number; reviews: Session[]; week: string; deskCode: { code: string; expiresAt: number } | null; plans: Plan[]; pages: {mine:PageInfo;feed:PageInfo;reviews:PageInfo}; activity: ActivitySummary };
+export type AppState = { routines:Routine[];pilot:PilotStats|null; user: { userId: string; name: string } | null; campus: Campus | null; me: RankedMember | null; members: RankedMember[]; squads: Squad[]; feed: Session[]; mine: Session[]; activeSession: Session | null; serverNow: number; reviews: Session[]; week: string; deskCode: { code: string; expiresAt: number } | null; plans: Plan[]; pages: {mine:PageInfo;feed:PageInfo;reviews:PageInfo}; activity: ActivitySummary };
 export const MIN_SCAN_DURATION = 5 * 60_000;
 export const MAX_SCAN_DURATION = 240 * 60_000;
 export function dayKey(value: number | Date = Date.now()) {

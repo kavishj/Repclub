@@ -260,12 +260,12 @@ The spacing base is (4px). Repeated within-group gaps use (8px) and (12px); sect
 | --- | --- |
 | At most 1000px | Side gutters become 20px; the personal column is 320px and the home-column gap becomes 20px. |
 | At most 800px | Home becomes one column with a 16px section gap and workout controls ahead of community content. An opened editor hides other personal-column blocks. Otherwise the personal area uses two columns. |
-| At most 760px | Horizontal navigation gives way to bottom navigation with a safe-area inset; the header row stays at least 64px. Main content uses 16px gutters and leaves `calc(80px + env(safe-area-inset-bottom))` at the bottom. Bottom-navigation targets are at least 56px high. The mobile Start/Finish shortcut is hidden while the inline editor is open. |
+| At most 760px | Horizontal navigation gives way to bottom navigation with a safe-area inset; the header row stays at least 64px. Main content uses 16px gutters and leaves `calc(94px + env(safe-area-inset-bottom))` at the bottom for the floating navigation. Bottom-navigation targets are at least 44px high. The mobile Start/Finish shortcut is hidden while the inline editor is open. |
 | At most 520px | Main gutters become 12px and personal content stacks. Task sections stay unboxed without shell padding. Entry metadata and numeric controls reflow into two columns. |
 | At most 360px | Header-action spacing and the mobile scan shortcut compact further. |
 | Coarse pointer above 520px | Numeric inputs sit above their decrement/increment row; step targets retain at least 44px width. |
 
-The editor footer is sticky: (16px) above the desktop and tablet bottom, then `calc(64px + env(safe-area-inset-bottom))` on phones. These are source declarations, not browser-measured clearances. Sticky offsets, long content and keyboard interaction still need browser capture and interaction review.
+The editor footer is sticky: (16px) above the desktop and tablet bottom, then `calc(78px + env(safe-area-inset-bottom))` on phones. These are source declarations, not browser-measured clearances. Sticky offsets, long content and keyboard interaction still need browser capture and interaction review.
 
 ## Elevation & Depth
 
@@ -312,7 +312,7 @@ Base UI owns autocomplete, selects and numeric entry. Exercise names allow free 
 
 ### Navigation
 
-Desktop navigation is a horizontal set of text controls with Secondary Ink at rest, Primary Ink on hover and semibold accent text when selected. There is no filled selected-state box. The selected item exposes `aria-current="page"`. Phone bottom navigation uses the surface tone, a top separator, safe-area padding and accent text for the active destination. Icons, where present, are inline SVG controls with accessible labels; decorative heading icons are outside the chosen home and entry direction.
+Desktop navigation is a horizontal set of text controls with Secondary Ink at rest, Primary Ink on hover and semibold accent text when selected. There is no filled selected-state box. The selected item exposes `aria-current="page"`. Phone bottom navigation adapts GodUI’s Tab Bar into a floating capsule, inset 12px above the safe area, with 44px targets, an animated lime active indicator and an active destination label. It is at most 360px wide with 12px side clearance. Reduced motion removes the icon pop and spring motion. Icons, where present, are inline SVG controls with accessible labels; decorative heading icons are outside the chosen home and entry direction.
 
 ### Weekly commitment and status timeline
 

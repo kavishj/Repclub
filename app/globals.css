@@ -273,6 +273,16 @@ kbd { font-size: 12px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
 .empty h3 { font-size: 18px; }
 .empty p { max-width: 340px; font-size: 12px; color: var(--muted); line-height: 1.8; margin: 8px 0 18px; }
 .bottom-nav { display: none; }
+.godui-tab-bar { align-items:center; gap:2px; border:1px solid var(--line); border-radius:999px; padding:4px; background:var(--panel); background:color-mix(in srgb,var(--panel) 94%,transparent); box-shadow:0 8px 28px #00000026; backdrop-filter:blur(16px); }
+.godui-tab-bar[data-safe-area] { padding-bottom:max(4px,env(safe-area-inset-bottom)); }
+.godui-tab-button { position:relative; display:inline-flex; flex:1 1 0; min-width:44px; height:44px; align-items:center; justify-content:center; gap:6px; border-radius:999px; padding:8px; color:var(--muted); font-size:12px; font-weight:600; white-space:nowrap; }
+.godui-tab-button[data-active] { flex:2.2 1 0; color:var(--accent-ink); }
+.godui-tab-button:hover:not([data-active]) { color:var(--text); }
+.godui-tab-button:focus-visible { outline:2px solid var(--accent-text); outline-offset:2px; }
+.godui-tab-indicator { position:absolute; inset:0; border-radius:inherit; background:var(--accent); }
+.godui-tab-icon { position:relative; display:flex; flex-shrink:0; width:20px; height:20px; align-items:center; justify-content:center; }
+.godui-tab-label { position:relative; overflow:hidden; white-space:nowrap; }
+.godui-tab-badge { position:absolute; top:-6px; right:-6px; display:flex; height:16px; min-width:16px; align-items:center; justify-content:center; padding-inline:3px; border-radius:50%; background:var(--danger); color:var(--bg); font-size:10px; }
 
 /* Shared dialogs use the same surfaces and spacing in both themes. */
 .modal { color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 15px; padding: 0; position: fixed; margin: auto; width: min(550px,calc(100% - 32px)); max-height: 90dvh; overflow: auto; box-shadow: 0 30px 100px #00000050; }
@@ -430,10 +440,6 @@ kbd { font-size: 12px; line-height: 1; padding: 3px 4px; border-radius: 3px; bor
   .subtle-button { min-height: 42px; }
   .workout-actions { gap: 13px; }
   .bottom-nav { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-around; padding: 7px 8px max(7px,env(safe-area-inset-bottom)); background: var(--sidebar); border-top: 1px solid var(--line); box-shadow: 0 -4px 18px #00000008; }
-  .bottom-nav > button { display: flex; flex: 1; flex-direction: column; align-items: center; gap: 4px; padding: 5px 1px; color: var(--muted); border-radius: 7px; min-height: 48px; }
-  .bottom-nav > button > span { font-size: 12px; }
-  .bottom-nav > button.active { color: var(--accent-text); }
-  .bottom-nav > button.active svg { stroke-width: 2.4; }
   .journal-metrics { gap: 26px; padding: 8px 0; flex-wrap: wrap; }
   .journal-metrics > span > svg { width: 17px; }
   .journal-metrics > button { margin-left: 0; }
@@ -967,22 +973,21 @@ input,textarea { caret-color:var(--accent-text); }
 }
 @media(max-width:760px) {
   html { scroll-padding-top:80px; }
+  .clubhouse-app .main { padding-bottom:0; }
+  .clubhouse-app .bottom-nav { position:fixed; z-index:25; left:50%; right:auto; bottom:calc(12px + env(safe-area-inset-bottom)); display:flex; width:min(360px,calc(100% - 24px)); transform:translateX(-50%); }
   .club-nav { display:none; }
   .club-header-row { min-height:64px; padding-inline:16px; }
-  .clubhouse-app .main-content { padding:12px 16px calc(80px + env(safe-area-inset-bottom)); }
+  .clubhouse-app .main-content { padding:12px 16px calc(94px + env(safe-area-inset-bottom)); }
   .clubhouse-app .page-heading { margin-bottom:12px; }
   .clubhouse-app .page-heading h1 { font-size:24px; }
   .clubhouse-app .page-date { display:none; }
-  .clubhouse-app .bottom-nav { padding-bottom:env(safe-area-inset-bottom); background:var(--panel); border-top:1px solid var(--line); }
-  .clubhouse-app .bottom-nav button { min-height:56px; font-size:12px; }
-  .clubhouse-app .bottom-nav button.active { color:var(--accent-text); }
   .club-week { margin-bottom:16px; }
   .clubhouse-app .workout-title { font-size:20px; }
   .clubhouse-app .workout-actions { gap:12px; }
   .clubhouse-app .workout-card { padding-top:12px; }
   .club-help,.club-refresh { display:none; }
   .club-campus { max-width:180px; }
-  .entry-footer { bottom:calc(64px + env(safe-area-inset-bottom)); }
+  .entry-footer { bottom:calc(78px + env(safe-area-inset-bottom)); }
   .workout-session.running { top:76px; }
 }
 @media(max-width:520px) {
@@ -1036,3 +1041,48 @@ input,textarea { caret-color:var(--accent-text); }
 .entry-manual-switch { color:var(--muted); font-size:12px; }
 
 @media(max-width:760px) { .club-mobile-scan.editor-open { display:none; } }
+
+/* Routines, reminders and progress use the same unboxed layout as the logbook. */
+.routine-section { margin-top:20px; }
+.routine-section h3 { font-size:14px; margin-bottom:4px; }
+.routine-row { display:flex; align-items:center; gap:8px; width:100%; min-height:64px; border-bottom:1px solid var(--line); text-align:left; }
+.routine-use { display:flex; align-items:center; justify-content:space-between; gap:12px; flex:1; min-width:0; min-height:60px; padding:10px 0; text-align:left; }
+.routine-use > span { min-width:0; }
+.routine-use strong { display:block; font-size:14px; overflow-wrap:anywhere; }
+.routine-use small { display:block; color:var(--muted); font-size:12px; margin-top:4px; overflow-wrap:anywhere; }
+.routine-use > svg { color:var(--muted); }
+.routine-confirm { display:flex; gap:12px; }
+.danger-text { color:var(--danger); }
+.calendar-plan { margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+.calendar-plan h3 { display:flex; align-items:center; gap:8px; font-size:14px; margin-bottom:8px; }
+.reminder-fields { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:12px 0; }
+.reminder-fields label { min-width:0; color:var(--muted); font-size:12px; }
+.reminder-fields .entry-select { margin-top:7px; min-height:44px; font-size:14px; padding-inline:10px; }
+.modal .reminder-fields input { margin-top:7px; font-size:16px; min-height:44px; padding-inline:10px; }
+.recap-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:0; padding:16px 0; border-block:1px solid var(--line); }
+.recap-metrics dt,.pilot-metrics dt { color:var(--muted); font-size:12px; }
+.recap-metrics dd { margin:4px 0 0; font-size:24px; font-weight:600; font-variant-numeric:tabular-nums; }
+.recap-metrics dd small { color:var(--muted); font-size:14px; font-weight:400; }
+.recap-comparison { font-size:14px; margin:16px 0 8px; }
+.recap-actions { display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-top:20px; }
+.pilot-report { margin-bottom:24px; }
+.pilot-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px 24px; margin:12px 0; }
+.pilot-metrics > div { padding-bottom:12px; border-bottom:1px solid var(--line); }
+.pilot-metrics dd { margin:4px 0 0; font-size:21px; font-weight:600; font-variant-numeric:tabular-nums; }
+.pilot-metrics dd small { display:block; color:var(--muted); font-size:12px; font-weight:400; margin-top:4px; }
+.save-routine { padding:0 0 12px; }
+.save-routine > div { display:flex; gap:16px; align-items:center; margin-top:8px; }
+.workout-editor .save-routine input { margin-top:6px; min-height:44px; padding:10px 12px; border:1px solid var(--control-line); border-radius:16px; background:var(--panel-alt); font-size:16px; }
+.workout-corrections details { margin-top:12px; color:var(--danger); font-size:12px; }
+.workout-corrections summary { min-height:44px; cursor:pointer; padding-block:12px; }
+.workout-corrections .text-button { min-height:44px; }
+.appeal-form { border-top:1px solid var(--line); padding-top:16px; margin-top:16px; }
+.appeal-form > label { display:block; font-size:13px; }
+.review-appeal { font-size:13px; margin:12px 0; color:var(--pending); overflow-wrap:anywhere; }
+@media(max-width:520px) { .reminder-fields { grid-template-columns:repeat(2,minmax(0,1fr)); } .reminder-fields > label:first-child { grid-column:1/-1; } .pilot-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } }
+.onboarding-optional { margin-top:16px; border-top:1px solid var(--line); }
+.onboarding-optional > summary { min-height:44px; padding:12px 0; cursor:pointer; color:var(--muted); font-size:13px; }
+.pilot-report > summary { display:flex; align-items:center; justify-content:space-between; min-height:44px; margin-top:16px; padding-block:8px; cursor:pointer; list-style:none; font-size:16px; font-weight:600; }
+.pilot-report > summary::-webkit-details-marker { display:none; }
+.pilot-report > summary > svg { color:var(--muted); transition:transform .16s; }
+.pilot-report[open] > summary > svg { transform:rotate(180deg); }

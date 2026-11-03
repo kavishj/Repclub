@@ -15,7 +15,7 @@ export default function Experience({ children }: { children: ReactNode }) {
       <Tooltip.Provider delayDuration={350}>
         {children}
         <Toaster closeButton visibleToasts={2} duration={3500} position="bottom-right"
-          mobileOffset={{ bottom: 85, left: 16, right: 16 }}
+          mobileOffset={{ bottom: "calc(90px + env(safe-area-inset-bottom))", left: 16, right: 16 }}
           toastOptions={{ className: "app-notice", style: { background: "var(--panel)", color: "var(--text)", borderColor: "var(--line)" } }}/>
       </Tooltip.Provider>
     </LazyMotion>

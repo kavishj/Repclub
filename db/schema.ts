@@ -25,7 +25,7 @@ export const sessions = sqliteTable("sessions", {
   deskSupported: integer("desk_supported").notNull().default(0), createdAt: integer("created_at").notNull(),
   timingSource: text("timing_source").notNull().default("manual"),
   startedAt: integer("started_at"), endedAt: integer("ended_at"),
-  reviewedBy: text("reviewed_by"), reviewedAt: integer("reviewed_at"), reviewNote: text("review_note"),
+  reviewedBy: text("reviewed_by"), reviewedAt: integer("reviewed_at"), reviewNote: text("review_note"), appealNote:text("appeal_note"), appealedAt:integer("appealed_at"),
 }, t => [index("sessions_campus").on(t.campusId),
   index("sessions_user_history").on(t.userId, t.createdAt, t.id),
   index("sessions_campus_history").on(t.campusId, t.createdAt, t.id),
@@ -39,3 +39,12 @@ export const deskCodes = sqliteTable("desk_codes", {
   campusId: text("campus_id").primaryKey().references(() => campuses.id), code: text("code").notNull(), expiresAt: integer("expires_at").notNull(),
   previousCode: text("previous_code"), previousExpiresAt: integer("previous_expires_at"),
 });
+
+export const routines = sqliteTable("routines", {
+  id:text("id").primaryKey(),userId:text("user_id").notNull().references(()=>members.userId),campusId:text("campus_id").notNull().references(()=>campuses.id),
+  name:text("name").notNull(),type:text("type").notNull(),exercises:text("exercises").notNull(),createdAt:integer("created_at").notNull(),updatedAt:integer("updated_at").notNull(),
+},t=>[index("routines_user").on(t.userId)]);
+export const reviewEvents = sqliteTable("review_events", {
+  id:text("id").primaryKey(),sessionId:text("session_id").notNull().references(()=>sessions.id),actorId:text("actor_id").notNull().references(()=>members.userId),
+  action:text("action").notNull(),note:text("note").notNull(),createdAt:integer("created_at").notNull(),
+},t=>[index("review_events_session").on(t.sessionId)]);

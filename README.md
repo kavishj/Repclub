@@ -64,3 +64,15 @@ node --experimental-strip-types tests/worker-smoke.mjs
 The Worker smoke test uses an ephemeral Miniflare D1 database, applies every checked-in migration, and exercises authentication, campus isolation, invitations, permission checks, independent attendance review, legacy-data preservation, manual-log exclusion, expired and foreign QR rejection, server-timed checkout, forged-time rejection, concurrent scan protection, goal locking, encouragement, abandoned-session handling, and persisted state reload. Test-only D1 fixtures simulate elapsed time without adding an app clock override. Synthetic identity headers are local test fixtures only. Hosted requests use the platform's authenticated identity.
 
 Generate additive schema migrations with `node node_modules/drizzle-kit/bin.cjs generate`. Production migrations are applied by Sites during publication. Demo and test records are not seeded into production.
+
+## First-use value and pilot tools
+
+- Three editable starter templates and up to 20 private saved routines. Routines can be added to a running scan workout or a manual log without overwriting existing exercise values.
+- Calendar exports for planned gym days, with India-time reminders before gym time and at the planned checkout time. Users import the ICS into their calendar; these reminders do not change server scan clocks.
+- A weekly recap of verified visits, pending reviews and manual logs. Gym staff see aggregate activation, weekly goal completion, checkout completion, average review delay and week-four return metrics.
+- Manual-log editing/deletion and a once-per-visit appeal for eligible declined attendance, with an append-only review trail. Existing reward eligibility and independent-review rules remain enforced.
+- Refreshed history retains loaded pages. Own manual corrections are reflected in loaded records.
+- Mobile navigation adapts the MIT-licensed [GodUI Tab Bar](https://godui.design/docs/lab/navigation/tab-bar), with a floating capsule, shared active indicator, reduced-motion support and home-indicator clearance. The source license is retained in `components/godui/LICENSE`.
+- New members can finish setup and start training before joining a friend squad.
+
+The student pilot remains free, with internal rewards and no paid AI or wearable dependency. Site enrollment remains an explicit sharing decision.

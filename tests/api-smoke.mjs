@@ -124,5 +124,29 @@ export async function runApiSmoke(db) {
  const exported=await request(owner,'/api/export');assert.equal(exported.workouts.length,total);assert.ok(exported.workouts.every(s=>s.userId===owner));await request(null,'/api/export',null,401);
  const other=await state(outsider);assert.equal(other.feed.length,0);assert.equal(other.members.length,1);assert.equal(other.reviews.length,0);
  const isolated=await fetch(base+'/',{headers:headers(outsider)});const isolatedHtml=await isolated.text();assert.ok(isolatedHtml.includes('Other Campus '+tag));assert.ok(!isolatedHtml.includes('QA Campus '+tag));
+ // Routines are private reusable templates and never award attendance points.
+ const routineId=crypto.randomUUID(),routine={action:'saveRoutine',id:routineId,name:'My upper day',type:'Strength',exercises:manual.exercises};
+ await Promise.all([act(owner,routine),act(owner,routine)]);o=await state(owner);assert.equal(o.routines.filter(r=>r.id===routineId).length,1);assert.equal(o.routines.find(r=>r.id===routineId).name,'My upper day');
+ assert.equal((await state(invited)).routines.length,0);await act(outsider,{...routine,name:'Stolen'},404);await act(outsider,{action:'deleteRoutine',id:routineId},404);
+ await act(owner,{...routine,exercises:[]},400);assert.equal((await state(owner)).me.stats.xp,10);
+ assert.ok((await state(owner)).pilot);assert.equal((await state(invited)).pilot,null);
+ // Manual correction cannot touch a scan duration, status, or rewards.
+ await act(student,{...manual,action:'updateWorkout',id:manualId,title:'Corrected manual',duration:38});
+ s=await state(student);assert.equal(s.mine.find(item=>item.id===manualId)?.duration,38);assert.equal(s.me.stats.xp,10);
+ await act(outsider,{...manual,action:'updateWorkout',id:manualId},409);
+ await act(student,{...manual,action:'updateWorkout',id:sid},409);await act(student,{...manual,action:'updateWorkout',id:manualId,startedAt:Date.now()},400);
+ await act(student,{action:'deleteWorkout',id:sid},404);await act(student,{action:'deleteWorkout',id:manualId});assert.ok(!(await state(student)).mine.some(item=>item.id===manualId));assert.equal((await state(student)).me.stats.xp,10);
+ await db.prepare('UPDATE plans SET locked_at=NULL WHERE user_id=? AND week=?').bind(invited,early.week).run();await act(invited,{action:'deleteWorkout',id:fallbackId});assert.equal((await state(invited)).activity.goalLocked,true);
+ // A declined visit may be appealed once, with its original review preserved.
+ const appellant='qa-appeal-'+tag;await act(appellant,{action:'joinCampus',...profile,name:'Appeal Member',code:o.campus.inviteCode});
+ const appealCode=await qr(owner);await act(appellant,{action:'scanStart',code:appealCode});let ap=await state(appellant);const appealId=ap.activeSession.id;await elapsed(appealId,6*60000);await act(appellant,{action:'scanFinish',id:appealId,code:appealCode});
+ await act(owner,{action:'review',id:appealId,decision:'declined',confirmed:false,note:'Please check the desk record.'});
+ await act(outsider,{action:'appeal',id:appealId,note:'Other campus'},409);await act(appellant,{action:'appeal',id:appealId,note:'Check the 6 PM attendance register.'});
+ ap=await state(appellant);assert.equal(ap.mine[0].status,'pending');assert.equal(ap.mine[0].reviewedAt,null);assert.equal(ap.mine[0].appealNote,'Check the 6 PM attendance register.');assert.equal(ap.me.stats.xp,0);await act(appellant,{action:'appeal',id:appealId,note:'Again'},409);
+ await act(owner,{action:'review',id:appealId,decision:'verified',confirmed:true,note:'Desk register checked.'});assert.equal((await state(appellant)).me.stats.xp,10);
+ const audit=await db.prepare('SELECT action FROM review_events WHERE session_id=? ORDER BY created_at,id').bind(appealId).all();assert.equal(audit.results.length,3);assert.deepEqual(new Set(audit.results.map(e=>e.action)),new Set(['declined','appeal','verified']));
+ const expandedExport=await request(owner,'/api/export');assert.equal(expandedExport.routines.length,1);assert.ok(Array.isArray(expandedExport.reviews));
+ await act(owner,{action:'deleteRoutine',id:routineId});assert.equal((await state(owner)).routines.length,0);
+ console.log('PASS: private reusable routines, staff-only pilot metrics, manual correction/deletion without reward changes, durable scan locks, and audited independent appeals.');
  console.log('PASS: QR overlap expiry, durable goal locks, atomic manual fallback, short/long checkout, idempotent saves, bounded pagination/search/export, privacy, and onboarding, manual-log exclusion, scan clocks and reload, expired/foreign QR rejection, forged timestamps, duplicate/concurrent scans, immutable durations, independent review, abandoned sessions, permissions, private feeds, rewards, and durable reload.');
 }

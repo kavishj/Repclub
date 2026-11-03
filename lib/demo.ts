@@ -1,3 +1,5 @@
+import { pilotStats } from "./insights";
+import type { Routine } from "./routines";
 import { dayKey, shiftDay, weekKey, rankMembers, activitySummary, type AppState, type Member, type Session, type Plan, type Squad } from "./league";
 export function makeDemo() {
   const now = Date.now(), week = weekKey(), campusId = "sample-campus";
@@ -23,12 +25,12 @@ export function makeDemo() {
   }
   sessions.push({ id: "pending-rohan", campusId, userId: "rohan", title: "Weekend strength session", type: "Strength", date: dayKey(), duration: 45, notes: "", exercises, status: "pending", deskSupported: 1, timingSource: "scan", startedAt: now - 45 * 60000, endedAt: now, createdAt: now - 1800000, reviewedBy: null, reviewedAt: null, reviewNote: null, cheers: 1, cheered: false });
   const squads: Squad[] = [{ id: "regulars", campusId, name: "The Regulars", inviteCode: "REPS2026", createdAt: now }, { id: "early", campusId, name: "Early Birds", inviteCode: "EARLY234", createdAt: now }];
-  return { members, sessions, plans, squads, deskCode: { code: "repclub:gym:v1:" + "a".repeat(64), expiresAt: now + 120000 }, campus: { id: campusId, name: "North Campus", gymName: "Campus Fitness Centre", ownerId: "you", inviteCode: "CAMP2026", createdAt: now - 21 * 86400000 } };
+  return { routines:[] as Routine[],members, sessions, plans, squads, deskCode: { code: "repclub:gym:v1:" + "a".repeat(64), expiresAt: now + 120000 }, campus: { id: campusId, name: "North Campus", gymName: "Campus Fitness Centre", ownerId: "you", inviteCode: "CAMP2026", createdAt: now - 21 * 86400000 } };
 }
 export type DemoData = ReturnType<typeof makeDemo>;
 export function demoState(d: DemoData): AppState {
   const members = rankMembers(d.members, d.sessions, d.plans), me = members.find(m => m.userId === "you")!;
   const peerIds = new Set(members.filter(m => m.squadId === me.squadId).map(m => m.userId));
   const ordered = [...d.sessions].sort((a,b) => b.createdAt - a.createdAt);
-  return { user: { userId: "you", name: "You" }, campus: d.campus, me, members, squads: d.squads, feed: ordered.filter(s => (s.userId === "you" || peerIds.has(s.userId)) && s.status !== "declined" && s.status !== "recording").slice(0, 40), mine: ordered.filter(s => s.userId === "you" && s.status !== "recording"), activeSession: ordered.find(s => s.userId === "you" && s.status === "recording") ?? null, serverNow: Date.now(), reviews: ordered.filter(s => s.status === "pending"), week: weekKey(), deskCode: d.deskCode, plans: d.plans.filter(p => p.userId === "you"), pages:{mine:{nextCursor:null,total:ordered.filter(s=>s.userId==="you"&&s.status!=="recording").length},feed:{nextCursor:null,total:ordered.length},reviews:{nextCursor:null,total:ordered.filter(s=>s.status==="pending").length}},activity:activitySummary(me,d.sessions,d.plans) };
+  return { routines:d.routines,pilot:pilotStats(d.members,d.sessions.filter(s=>s.status==="verified").map(s=>({userId:s.userId,date:s.date})),d.plans,{starts:d.sessions.length,checkouts:d.sessions.length,averageReviewMinutes:8}),user: { userId: "you", name: "You" }, campus: d.campus, me, members, squads: d.squads, feed: ordered.filter(s => (s.userId === "you" || peerIds.has(s.userId)) && s.status !== "declined" && s.status !== "recording").slice(0, 40), mine: ordered.filter(s => s.userId === "you" && s.status !== "recording"), activeSession: ordered.find(s => s.userId === "you" && s.status === "recording") ?? null, serverNow: Date.now(), reviews: ordered.filter(s => s.status === "pending"), week: weekKey(), deskCode: d.deskCode, plans: d.plans.filter(p => p.userId === "you"), pages:{mine:{nextCursor:null,total:ordered.filter(s=>s.userId==="you"&&s.status!=="recording").length},feed:{nextCursor:null,total:ordered.length},reviews:{nextCursor:null,total:ordered.filter(s=>s.status==="pending").length}},activity:activitySummary(me,d.sessions,d.plans) };
 }

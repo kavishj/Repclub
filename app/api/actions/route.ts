@@ -17,6 +17,11 @@ const schemas = {
   joinCampus: z.object({ action: z.literal("joinCampus"), ...profile, code: z.string().trim().min(6).max(12) }),
   plan: z.object({ action: z.literal("plan"), goal, days }),
   workout: z.object({ action: z.literal("workout"), ...workoutDetails, date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), duration: z.number().int().min(1).max(1440), requestId: z.string().uuid().optional(), code: z.string().trim().max(6).optional() }).strict(),
+  updateWorkout: z.object({action:z.literal("updateWorkout"),id:z.string().min(1),...workoutDetails,date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),duration:z.number().int().min(1).max(1440)}).strict(),
+  deleteWorkout: z.object({action:z.literal("deleteWorkout"),id:z.string().min(1)}).strict(),
+  saveRoutine: z.object({action:z.literal("saveRoutine"),id:z.string().uuid(),name,type:workoutDetails.type,exercises:workoutDetails.exercises.min(1)}).strict(),
+  deleteRoutine: z.object({action:z.literal("deleteRoutine"),id:z.string().uuid()}).strict(),
+  appeal: z.object({action:z.literal("appeal"),id:z.string().min(1),note:z.string().trim().min(3).max(250)}).strict(),
   scanStart: z.object({ action: z.literal("scanStart"), code: scanCode }).strict(),
   scanFinish: z.object({ action: z.literal("scanFinish"), id: z.string().min(1), code: scanCode }).strict(),
   manualFinish: z.object({ action: z.literal("manualFinish"), id: z.string().min(1), ...workoutDetails, duration: z.number().int().min(1).max(1440) }).strict(),
@@ -93,6 +98,39 @@ export async function POST(request: Request) {
           db.prepare("INSERT OR IGNORE INTO sessions (id,campus_id,user_id,title,type,date,duration,notes,exercises,status,desk_supported,timing_source,created_at) VALUES (?,?,?,?,?,?,?,?,?,'manual',0,'manual',?)").bind(data.requestId ?? id(), me.campusId, me.userId, data.title, data.type, data.date, data.duration, data.notes, JSON.stringify(data.exercises), now),
         ]); break;
       }
+      case "saveRoutine": {
+        const existing=await db.prepare("SELECT user_id FROM routines WHERE id=?").bind(data.id).first<{user_id:string}>();
+        if(existing&&existing.user_id!==me.userId)throw new HttpError("Routine not found.",404);
+        const result=existing?await db.prepare("UPDATE routines SET name=?,type=?,exercises=?,updated_at=? WHERE id=? AND user_id=? AND campus_id=?").bind(data.name,data.type,JSON.stringify(data.exercises),now,data.id,me.userId,me.campusId).run():await db.prepare("INSERT OR IGNORE INTO routines (id,user_id,campus_id,name,type,exercises,created_at,updated_at) SELECT ?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM routines WHERE user_id=?)<20").bind(data.id,me.userId,me.campusId,data.name,data.type,JSON.stringify(data.exercises),now,now,me.userId).run();
+        if(!result.meta.changes){const saved=await db.prepare("SELECT id FROM routines WHERE id=? AND user_id=? AND campus_id=?").bind(data.id,me.userId,me.campusId).first();if(!saved)throw new HttpError("You can save up to 20 routines. Remove one before adding another.",409);}
+        break;
+      }
+      case "deleteRoutine": {
+        const result=await db.prepare("DELETE FROM routines WHERE id=? AND user_id=? AND campus_id=?").bind(data.id,me.userId,me.campusId).run();
+        if(!result.meta.changes)throw new HttpError("Routine not found.",404);break;
+      }
+      case "updateWorkout": {
+        if(data.date>dayKey()||Number.isNaN(Date.parse(data.date))||new Date(data.date+"T12:00:00Z").toISOString().slice(0,10)!==data.date)throw new HttpError("Choose a real date in the past or today.");
+        const result=await db.prepare("UPDATE sessions SET title=?,type=?,date=?,duration=?,notes=?,exercises=?,status='manual' WHERE id=? AND user_id=? AND campus_id=? AND timing_source='manual'").bind(data.title,data.type,data.date,data.duration,data.notes,JSON.stringify(data.exercises),data.id,me.userId,me.campusId).run();
+        if(!result.meta.changes)throw new HttpError("Only your manual workout logs can be changed here.",409);break;
+      }
+      case "deleteWorkout": {
+        const session=await db.prepare("SELECT started_at,date FROM sessions WHERE id=? AND user_id=? AND campus_id=? AND timing_source='manual'").bind(data.id,me.userId,me.campusId).first<{started_at:number|null;date:string}>();
+        if(!session)throw new HttpError("Only your manual workout logs can be deleted.",404);
+        const statements:D1PreparedStatement[]=[];
+        if(session.started_at)statements.push(db.prepare("UPDATE plans SET locked_at=COALESCE(locked_at,?) WHERE user_id=? AND week=?").bind(session.started_at,me.userId,weekKey(dayKey(session.started_at))));
+        statements.push(db.prepare("DELETE FROM cheers WHERE session_id=?").bind(data.id),db.prepare("DELETE FROM sessions WHERE id=? AND user_id=? AND campus_id=? AND timing_source='manual'").bind(data.id,me.userId,me.campusId));
+        await db.batch(statements);break;
+      }
+      case "appeal": {
+        const condition="id=? AND user_id=? AND campus_id=? AND status='declined' AND timing_source='scan' AND appealed_at IS NULL AND ended_at-started_at BETWEEN 300000 AND 14400000 AND NOT EXISTS (SELECT 1 FROM sessions other WHERE other.user_id=sessions.user_id AND other.date=sessions.date AND other.id<>sessions.id AND other.status IN ('recording','pending','verified') AND other.timing_source='scan')";
+        const results=await db.batch([
+          db.prepare(`INSERT INTO review_events (id,session_id,actor_id,action,note,created_at) SELECT ?,id,reviewed_by,'declined',COALESCE(review_note,''),reviewed_at FROM sessions WHERE ${condition} AND reviewed_by IS NOT NULL AND NOT EXISTS (SELECT 1 FROM review_events e WHERE e.session_id=sessions.id AND e.action='declined')`).bind(id(),data.id,me.userId,me.campusId),
+          db.prepare(`INSERT INTO review_events (id,session_id,actor_id,action,note,created_at) SELECT ?,id,?,'appeal',?,? FROM sessions WHERE ${condition}`).bind(id(),me.userId,data.note,now,data.id,me.userId,me.campusId),
+          db.prepare(`UPDATE sessions SET status='pending',appeal_note=?,appealed_at=?,reviewed_by=NULL,reviewed_at=NULL,review_note=NULL WHERE ${condition}`).bind(data.note,now,data.id,me.userId,me.campusId),
+        ]);
+        if(!results[2].meta.changes)throw new HttpError("This visit cannot be appealed, or an appeal has already been submitted.",409);break;
+      }
       case "scanStart": {
         await checkScan(data.code);
         const active = await db.prepare("SELECT id FROM sessions WHERE user_id=? AND status='recording'").bind(me.userId).first();
@@ -143,8 +181,11 @@ export async function POST(request: Request) {
         if (session.timing_source !== "scan" || !session.started_at || !session.ended_at) throw new HttpError("Manual logs cannot earn rewards or be promoted to scan-timed visits.", 409);
         if (data.decision === "verified" && !data.confirmed) throw new HttpError("Confirm that you independently checked this member's gym attendance.");
         if (data.decision === "declined" && data.note.length < 3) throw new HttpError("Give the member a short reason so they can resolve the issue.");
-        const result = await db.prepare("UPDATE sessions SET status=?,reviewed_by=?,reviewed_at=?,review_note=? WHERE id=? AND campus_id=? AND status='pending'").bind(data.decision, me.userId, now, data.note, data.id, me.campusId).run();
-        if (!result.meta.changes) throw new HttpError("This workout has already been reviewed.", 409);
+        const results=await db.batch([
+          db.prepare("INSERT INTO review_events (id,session_id,actor_id,action,note,created_at) SELECT ?,id,?,?,?,? FROM sessions WHERE id=? AND campus_id=? AND status='pending'").bind(id(),me.userId,data.decision,data.note,now,data.id,me.campusId),
+          db.prepare("UPDATE sessions SET status=?,reviewed_by=?,reviewed_at=?,review_note=? WHERE id=? AND campus_id=? AND status='pending'").bind(data.decision,me.userId,now,data.note,data.id,me.campusId),
+        ]);
+        if(!results[1].meta.changes)throw new HttpError("This workout has already been reviewed.",409);
         break;
       }
       case "createSquad": {
